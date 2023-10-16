@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="/css/admin.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <ul>
+          <li>
+            <a href="/pages/admin.html">View Feedback</a>
+          </li>
+          <li>
+            <a href="/pages/admin.html">View Grades</a>
+          </li>
+        </ul>
+      </div>
+      <div class="admin-content">
+        <div class="inputs-container">
+          <div class="small-input-container">
+            <label for="subjects">SUBJECTS: </label>
+            <select name="subjects" id="subjects">
+              <option value=""></option>
+              <option value="materia1">materia1</option>
+              <option value="materia2">materia2</option>
+              <option value="materia3">materia3</option>
+            </select>
+          </div>
+          <div class="small-input-container">
+            <label for="orderby">ORDER BY: </label>
+            <select name="orderby" id="orderby">
+              <option value=""></option>
+              <option value="materia1">asc</option>
+              <option value="materia2">desc</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
