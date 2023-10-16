@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+/* 
+.container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  border-radius: 30px;
+  padding: 20px;
+  box-shadow: -10px 10px 27px 1px rgba(0, 0, 0, 0.2);
+}
+
+.input-container {
+  border-radius: 6px;
+  box-shadow: -10px 10px 27px 1px rgba(0, 0, 0, 0.2);
+} */
