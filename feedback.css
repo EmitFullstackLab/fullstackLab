@@ -127,7 +127,6 @@
   border-radius: 10px;
   display: flex;
   align-items: center;
-  padding: 10px;
 }
 
 .text-box{
@@ -142,10 +141,7 @@
   align-items: center;
 }
 
-img{
-  padding: 3px;
-  scale: 130%;
-}
+
 
 
 textarea {
@@ -158,13 +154,20 @@ textarea {
   outline: 0;
 }
 
-.rating-star {
-  fill: #ccc; /* Colore di default */
+
+
+.none{
+  fill: #f4c542; /* Colore selezionato */
+}
+
+svg{
+  fill: rgb(0, 0, 0);
+  scale: 150%;
+  margin: 6px;
   cursor: pointer;
   transition: fill 0.2s; /* Effetto di transizione quando il colore cambia */
 }
 
-.rating-star.selected {
-  fill: #f4c542; /* Colore selezionato */
+.star svg.selected {
+  fill: #f4c542; /* Colore per le stelle selezionate */
 }
-
