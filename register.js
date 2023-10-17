@@ -83,7 +83,7 @@ formSubmit.addEventListener("submit", function (event) {
       }
     });
   } else {
-    error("Errore: Le password non corrispondono.");
+    error("Passwords do not match.");
   }
 });
 
