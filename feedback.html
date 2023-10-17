@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="feedback.css" />
+  </head>
+  <body>
+    <script src="feeedback.js"></script>
+    <form action="submit">
+
+      <span class="form-title">FEEDBACK</span>
+
+      <div class="inputs-container">
+
+        <select  class="small-input-container" name="subject" id="subject">
+            <option value="javascript">JavaScript</option>
+            <option value="php">PHP</option>
+            <option value="java">Java</option>
+            <option value="golang">Golang</option>
+            <option value="python">Python</option>
+            <option value="c#">C#</option>
+            <option value="C++">C++</option>
+            <option value="erlang">Erlang</option>
+        </select>
+
+        <div class="star">
+            <div class="star-container">
+                <img class="rating-star" data-value="1" src="./icons/star_FILL0_wght400_GRAD0_opsz24.svg">
+                  <!-- Inserisci qui il tuo codice SVG per una stella -->
+            </img>
+                <img class="rating-star" data-value="2" src="./icons/star_FILL0_wght400_GRAD0_opsz24.svg">
+                  <!-- Inserisci qui il tuo codice SVG per una stella -->
+            </img>
+                <!-- Aggiungi ulteriori stelle per la valutazione -->
+                <img class="rating-star" data-value="3" src="./icons/star_FILL0_wght400_GRAD0_opsz24.svg">
+                <!-- Inserisci qui il tuo codice SVG per una stella -->
+            </img>
+            <img class="rating-star" data-value="4" src="./icons/star_FILL0_wght400_GRAD0_opsz24.svg">
+                  <!-- Inserisci qui il tuo codice SVG per una stella -->
+            </img>
+            <img class="rating-star" data-value="5" src="./icons/star_FILL0_wght400_GRAD0_opsz24.svg">
+                  <!-- Inserisci qui il tuo codice SVG per una stella -->
+            </img>
+              </div>
+          </div>
+
+      </div>
+
+      <div class="text-box">
+        <textarea 
+          type="text"
+          id="text"
+          name="text"
+          placeholder="Text"
+        > </textarea>
+        </div>
+
+        <div class="submit-container">
+            <input
+              type="submit"
+              id="register-btn"
+              name="register-btn"
+              placeholder="REGISTER"
+            />
+          </div>
+    
+    </form>
+  </body>
+</html>
