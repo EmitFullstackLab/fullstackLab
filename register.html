@@ -7,14 +7,31 @@
     <link rel="stylesheet" href="register.css" />
   </head>
   <body>
-    <form action="submit">
+    <div class="error-container">
+      <span class="error-text"></span>
+    </div>
+    <form action="submit" class="register-form">
       <span class="form-title">USER REGISTER</span>
       <div class="big-input-container">
-        <input type="email" id="email" name="email" placeholder="EMAIL" />
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="EMAIL"
+          maxlength="100"
+          required
+        />
       </div>
       <div class="inputs-container">
         <div class="small-input-container">
-          <input type="text" id="name" name="name" placeholder="NAME" />
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="NAME"
+            maxlength="45"
+            required
+          />
         </div>
         <div class="small-input-container">
           <input
@@ -22,6 +39,8 @@
             id="surname"
             name="surname"
             placeholder="SURNAME"
+            maxlength="45"
+            required
           />
         </div>
       </div>
@@ -31,6 +50,8 @@
           id="stud-number"
           name="stud-number"
           placeholder="STUDENT NUMBER"
+          maxlength="5"
+          required
         />
       </div>
       <div class="inputs-container">
@@ -40,6 +61,7 @@
             id="password"
             name="password"
             placeholder="PASSWORD"
+            required
           />
         </div>
         <div class="small-input-container">
@@ -48,6 +70,7 @@
             id="confirmPwd"
             name="confirmPwd"
             placeholder="CONFIRM PASSWORD"
+            required
           />
         </div>
       </div>
@@ -56,13 +79,17 @@
           type="submit"
           id="register-btn"
           name="register-btn"
-          placeholder="REGISTER"
+          value="REGISTER"
         />
       </div>
       <span class="sub-link"
-        >DO YOU FUCK YOUR MUM?
-        <span class="clickable-span">LOGIN HERE!</span></span
+        >DO YOU ALREADY HAVE AN ACCOUNT?
+        <span class="clickable-span" id="toLogin">LOGIN HERE!</span></span
       >
     </form>
+    <div class="badjeej">
+      <img src="badjeej-nobg.png" alt="" />
+    </div>
+    <script src="register.js"></script>
   </body>
 </html>
