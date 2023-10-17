@@ -162,7 +162,7 @@ textarea {
 
 svg{
   fill: rgb(0, 0, 0);
-  scale: 150%;
+  scale: 130%;
   margin: 6px;
   cursor: pointer;
   transition: fill 0.2s; /* Effetto di transizione quando il colore cambia */
