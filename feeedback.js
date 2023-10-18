@@ -17,27 +17,50 @@ stars.forEach((star, index) => {
 const form = document.querySelector('form');
 form.addEventListener('submit', (event) => {
   event.preventDefault();
-  const subject = document.querySelector('#subject').value;
-  const message = document.querySelector('#text').value;
-  feedbackData.push({ subject, rating: selectedStar, message });
-  console.log(feedbackData);
+   // Aggiungi qui la convalida del modulo
+   const subject = document.querySelector('#subject').value;
+   const message = document.querySelector('#text').value;
+ 
+   // Convalida dei campi
+   let errors = [];
+ 
+   if (subject.trim() === '') {
+     errors.push('Il campo "Subject" è obbligatorio.');
+   }
+ 
+   if (selectedStar === 0) {
+     errors.push('Seleziona un voto!');
+   }
+ 
+   if (message.trim() === '') {
+     errors.push('Inserisci un commento!');
+   }
+ 
+   // Se ci sono errori, mostra un messaggio di errore
+   if (errors.length > 0) {
+     alert('Si sono verificati i seguenti errori:\n' + errors.join('\n'));
+   } else {
+     // Se non ci sono errori, procedi con l'invio del modulo
+     const feedback = { subject, rating: selectedStar, message };
+     feedbackData.push(feedback);
+     console.log('Dati del feedback:', feedbackData);
+     
+     // Esegui altre azioni, ad esempio l'invio al server o il reset del modulo
+     console.log('Invio al server');
+     form.reset();
+     selectedStar = 0;
+     changeStarColor(0);
+ 
+     // Visualizza il popup di conferma
+     popup.style.display = 'block';
+     overlay.style.display = 'block';
+   }
 });
 
 const popup = document.getElementById('popup');
 const overlay = document.getElementById('overlay');
 const continua = document.getElementById('continua');
 
-form.addEventListener('submit', function (event) {
-  event.preventDefault();
-  console.log("Invio al db")
-  console.log("Reset dei campi")
-  form.reset();
-  selectedStar = 0;
-  changeStarColor(0);
-
-  popup.style.display = 'block';
-  overlay.style.display = 'block';
-});
 
 // Aggiungi un evento per chiudere il popup e nascondere lo sfondo opaco
 continua.addEventListener('click', function () {
