@@ -43,10 +43,10 @@ form.addEventListener('submit', (event) => {
      // Se non ci sono errori, procedi con l'invio del modulo
      const feedback = { subject, rating: selectedStar, message };
      feedbackData.push(feedback);
-     console.log('Dati del feedback:', feedbackData);
+     console.log(feedbackData);
      
      // Esegui altre azioni, ad esempio l'invio al server o il reset del modulo
-     console.log('Invio al server');
+     console.log('Invio al db');
      form.reset();
      selectedStar = 0;
      changeStarColor(0);

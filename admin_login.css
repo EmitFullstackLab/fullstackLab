@@ -1,4 +1,3 @@
-
 * {
     padding: 0;
     margin: 0;
@@ -19,7 +18,7 @@
   
   form {
     width: 500px;
-    min-height: 500px;
+    min-height: 300px;
     border-radius: 30px;
     box-shadow: -10px 10px 27px 1px rgba(0, 0, 0, 0.25);
     padding: 20px;
@@ -58,11 +57,9 @@
     display: flex;
     align-items: center;
     padding: 10px;
-    cursor: pointer;
   }
   
   input {
-    cursor: pointer;
     border: 0;
     color: black;
     width: 100%;
@@ -114,108 +111,4 @@
   span.clickable-span {
     font-weight: 600;
   }
-
-.star-container{
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.star{
-  width: 48%;
-  height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-}
-
-.text-box{
-  width: 100%;
-  box-shadow: -5px 5px 10px 1px rgba(0, 0, 0, 0.25);
-  height: 200px;
-  border-radius: 10px;
-  padding: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-
-
-
-textarea {
-  height: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  min-height: 100%;
-  min-width: 100%;
-  width: 100%;
-  border: 0;
-  border-radius: 5px;
-  padding: 10px;
-  outline: 0;
-}
-
-
-
-.none{
-  fill: #f4c542; /* Colore selezionato */
-}
-
-svg{
-  fill: rgb(0, 0, 0);
-  scale: 130%;
-  margin: 6px;
-  cursor: pointer;
-  transition: fill 0.2s; /* Effetto di transizione quando il colore cambia */
-}
-
-.star svg.selected {
-  fill: #f4c542; /* Colore per le stelle selezionate */
-}
-
-#popup {
-  display: none;
-  position: fixed;
-  height: 7rem;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px;
-  background-color: white;
-  box-shadow: -5px 5px 10px 1px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
-  padding: 20px;
-  z-index: 1000;
-}
-
-
-.pop{
-  display: flex;
-  justify-content: space-around;
-  margin: 10px;
-}
-
-#overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Sfondo semitrasparente */
-  z-index: 500; /* Assicurati che copra tutti gli altri elementi */
-}
-
-#continua{
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-}
-
-#exit{
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-}
+  
