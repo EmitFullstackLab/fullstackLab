@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `lab-fullstack` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `lab-fullstack`;
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
 -- Host: localhost    Database: lab-fullstack
@@ -30,6 +28,7 @@ CREATE TABLE `feedbacks` (
   `feedback_rating` smallint NOT NULL,
   `id_user` int NOT NULL,
   `id_subject` int NOT NULL,
+  `feedback_date` datetime NOT NULL,
   PRIMARY KEY (`id_feedback`),
   KEY `fk_feedbacks_subjects_idx` (`id_subject`),
   KEY `kf_feedbacks_students_idx` (`id_user`),
@@ -56,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-16 13:32:46
+-- Dump completed on 2023-10-18  9:55:01

@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `lab-fullstack` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `lab-fullstack`;
 -- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
 --
 -- Host: localhost    Database: lab-fullstack
@@ -18,30 +16,28 @@ USE `lab-fullstack`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `students`
+-- Table structure for table `subjects`
 --
 
-DROP TABLE IF EXISTS `students`;
+DROP TABLE IF EXISTS `subjects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `students` (
-  `id_student` int NOT NULL AUTO_INCREMENT,
-  `student_name` varchar(45) NOT NULL,
-  `student_surname` varchar(45) NOT NULL,
-  `student_number` varchar(5) NOT NULL,
-  PRIMARY KEY (`id_student`),
-  UNIQUE KEY `student_number_UNIQUE` (`student_number`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `subjects` (
+  `id_subject` int NOT NULL AUTO_INCREMENT,
+  `subject_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id_subject`),
+  UNIQUE KEY `subject_naw_UNIQUE` (`subject_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `students`
+-- Dumping data for table `subjects`
 --
 
-LOCK TABLES `students` WRITE;
-/*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (1,'Alice','Smith','S001'),(2,'Bob','Johnson','S002'),(3,'Charlie','Williams','S003'),(4,'David','Brown','S004'),(5,'Ella','Jones','S005'),(6,'Frank','Davis','S006'),(7,'Grace','Wilson','S007'),(8,'Henry','Martinez','S008'),(9,'Isabella','Anderson','S009'),(10,'Jack','Hernandez','S010');
-/*!40000 ALTER TABLE `students` ENABLE KEYS */;
+LOCK TABLES `subjects` WRITE;
+/*!40000 ALTER TABLE `subjects` DISABLE KEYS */;
+INSERT INTO `subjects` VALUES (3,'Algoritmi e Strutture Dati'),(14,'Analisi dei Dati'),(5,'Basi di Dati'),(13,'Grafica Computerizzata'),(7,'Ingegneria del Software'),(10,'Intelligenza Artificiale'),(1,'Introduzione alla Programmazione'),(15,'Programmazione Distribuita'),(12,'Programmazione Funzionale'),(9,'Programmazione Mobile'),(2,'Programmazione Orientata agli Oggetti'),(8,'Reti di Calcolatori'),(11,'Sicurezza Informatica'),(6,'Sistemi Operativi'),(4,'Sviluppo Web');
+/*!40000 ALTER TABLE `subjects` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-16 13:32:46
+-- Dump completed on 2023-10-18  9:55:01

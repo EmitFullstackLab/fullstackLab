@@ -135,3 +135,11 @@ span.clickable-span:hover {
 .container-title {
   align-self: center;
 }
+
+.alert {
+  align-self: center;
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: large;
+  color: red;
+}

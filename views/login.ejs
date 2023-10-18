@@ -10,6 +10,10 @@
   <body>
     <form action="/login" method="POST" class="register-form">
       <span class="form-title">USER LOGIN</span>
+      <% if (message) { %>
+      <div class="alert"><%= message %></div>
+      <% } %>
+
       <div class="big-input-container">
         <input type="email" id="email" name="email" placeholder="Email" />
       </div>
