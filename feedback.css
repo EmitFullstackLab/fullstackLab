@@ -205,6 +205,12 @@ svg{
   z-index: 500; /* Assicurati che copra tutti gli altri elementi */
 }
 
+#continua{
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
 #exit{
   width: 100%;
   height: 100%;

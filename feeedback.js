@@ -25,19 +25,31 @@ form.addEventListener('submit', (event) => {
 
 const popup = document.getElementById('popup');
 const overlay = document.getElementById('overlay');
-const exit = document.getElementById('exit');
+const continua = document.getElementById('continua');
 
 form.addEventListener('submit', function (event) {
   event.preventDefault();
-  // Esegui qui la logica per inviare il modulo al server
+  console.log("Invio al db")
+  console.log("Reset dei campi")
+  form.reset();
+  selectedStar = 0;
+  changeStarColor(0);
 
-  // Mostra il popup e lo sfondo opaco
   popup.style.display = 'block';
   overlay.style.display = 'block';
 });
 
 // Aggiungi un evento per chiudere il popup e nascondere lo sfondo opaco
-exit.addEventListener('click', function () {
+continua.addEventListener('click', function () {
+  console.log("continua")
+  popup.style.display = 'none';
+  overlay.style.display = 'none';
+});
+
+const exitButton = document.querySelector('#exit'); // Seleziona l'elemento per il pulsante "Esci"
+
+exitButton.addEventListener('click', () => {
+  console.log("pop up chiuso")
   popup.style.display = 'none';
   overlay.style.display = 'none';
 });
