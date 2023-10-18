@@ -22,3 +22,22 @@ form.addEventListener('submit', (event) => {
   feedbackData.push({ subject, rating: selectedStar, message });
   console.log(feedbackData);
 });
+
+const popup = document.getElementById('popup');
+const overlay = document.getElementById('overlay');
+const exit = document.getElementById('exit');
+
+form.addEventListener('submit', function (event) {
+  event.preventDefault();
+  // Esegui qui la logica per inviare il modulo al server
+
+  // Mostra il popup e lo sfondo opaco
+  popup.style.display = 'block';
+  overlay.style.display = 'block';
+});
+
+// Aggiungi un evento per chiudere il popup e nascondere lo sfondo opaco
+exit.addEventListener('click', function () {
+  popup.style.display = 'none';
+  overlay.style.display = 'none';
+});
