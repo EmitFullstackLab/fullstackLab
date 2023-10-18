@@ -118,3 +118,8 @@ span.clickable-span {
 span.clickable-span:hover {
   text-decoration: underline;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
