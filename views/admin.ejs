@@ -21,13 +21,13 @@
       </div>
       <div class="content-container">
         <div class="add-admin-container">
-          <form action="submit" class="register-form">
+          <form action="/addAdmin" class="register-form" method="POST">
             <span class="form-title">ADMIN REGISTER</span>
             <div class="big-input-container">
               <input
-                type="email"
+                type="text"
                 id="admin-username"
-                name="admin-username"
+                name="admin_username"
                 placeholder="USERNAME"
                 maxlength="100"
                 required
@@ -59,12 +59,20 @@
           </form>
         </div>
         <div class="feedbacks-average-container">
+          <div
+            averages=" <%subjectsAverages[0].forEach(subjectAverage => {%><%= subjectAverage.subject_average %><%=','%><%})%>"
+            dates=" <%subjectsAverages[0].forEach(subjectAverage => {%><%= subjectAverage.feedback_date %><%=','%><%})%>"
+            id="dati-nascosti"
+          ></div>
           <div class="filters-container">
             <div class="filter-container">
               <span class="filter-title">SUBJECTS</span>
               <select name="subject" id="subject-average">
-                <option value="Python">Python</option>
-                <option value="Java">Java</option>
+                <% subjects[0].forEach(subject => {%>
+                <option value="<%= subject.id_subject %>">
+                  <%= subject.subject_name %>
+                </option>
+                <% }) %>
               </select>
             </div>
           </div>
@@ -86,8 +94,11 @@
               <span class="filter-title">SUBJECTS</span>
               <select name="subject" id="subject-view">
                 <option value="ALL">ALL</option>
-                <option value="Python">Python</option>
-                <option value="Java">Java</option>
+                <% subjects[0].forEach(subject => {%>
+                <option value="<%= subject.id_subject %>">
+                  <%= subject.subject_name %>
+                </option>
+                <% }) %>
               </select>
             </div>
             <div class="filter-container">
@@ -105,8 +116,9 @@
           </div>
           <div class="feedbacks-container-main">
             <div class="feedbacks-container">
+              <% feedbacks[0].forEach(feedback => {%>
               <div class="feedback-card">
-                <div class="feedback-title">Subject name</div>
+                <div class="feedback-title"><%= feedback.subject_name %></div>
                 <div class="rate-container">
                   <svg
                     data-value="1"
@@ -165,211 +177,21 @@
                   </svg>
                 </div>
                 <div class="feedback-text-container">
-                  <p class="feedback-text">
-                    Textxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                  </p>
+                  <p class="feedback-text"><%= feedback.feedback_text %></p>
                 </div>
-                <span class="feedback-autor">Student name</span>
+                <span class="feedback-autor"
+                  ><%= feedback.student_name_surname %></span
+                >
+                <span class="feedback-autor"
+                  ><%= feedback.feedback_date %></span
+                >
               </div>
-              <div class="feedback-card">
-                <div class="feedback-title">Subject name</div>
-                <div class="rate-container">
-                  <svg
-                    data-value="1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="2"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                </div>
-                <div class="feedback-text-container">
-                  <p class="feedback-text">Text</p>
-                </div>
-                <span class="feedback-autor">Student name</span>
-              </div>
-              <div class="feedback-card">
-                <div class="feedback-title">Subject name</div>
-                <div class="rate-container">
-                  <svg
-                    data-value="1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="2"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                </div>
-                <div class="feedback-text-container">
-                  <p class="feedback-text">Text</p>
-                </div>
-                <span class="feedback-autor">Student name</span>
-              </div>
-              <div class="feedback-card">
-                <div class="feedback-title">Subject name</div>
-                <div class="rate-container">
-                  <svg
-                    data-value="1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="2"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    class="stella"
-                    data-value="5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                </div>
-                <div class="feedback-text-container">
-                  <p class="feedback-text">Text</p>
-                </div>
-                <span class="feedback-autor">Student name</span>
-              </div>
+              <% }) %>
             </div>
           </div>
         </div>
       </div>
     </div>
-
     <script src="/admin.js"></script>
   </body>
 </html>

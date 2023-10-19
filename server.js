@@ -1,5 +1,6 @@
 /*------BCRYPT CONFIG------*/
 const bcrypt = require("bcrypt");
+const { log } = require("console");
 
 /*------ENVIRONMENT CONFIG------*/
 require("dotenv").config();
@@ -54,11 +55,6 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   const message = req.query.message;
   res.render("login.ejs", { message: message });
-});
-
-app.get("/admin", (req, res) => {
-  const message = req.query.message;
-  res.render("admin.ejs", { message: message });
 });
 
 app.get("/admin_login", (req, res) => {
@@ -186,6 +182,167 @@ app.post("/register", async (req, res) => {
     if (createdRow.affectedRows > 0) {
       console.log("user created");
       return res.redirect("/login");
+    }
+  } catch (error) {
+    console.log("Error executing query:", error);
+  }
+});
+
+/*
+
+    ___
+   /   \   |     |  |         |
+  |     |  |     |  |         |
+  |     |  |     |  |      \  |  /
+  |    \|  |     |  |       \ | /
+   \___/\   \___/   |        \|/
+
+
+  funzioni di login e rigistrazione dell'admin
+
+  modificato il reindirizzamento alla pagina /admin
+
+  copia e modifica qusta parte sotto nel tuo codice main
+
+  login admin non ancora funzionante
+  
+  ↓
+  ↓
+  ↓
+
+*/
+
+app.get("/admin", async (req, res) => {
+  try {
+    const message = req.query.message;
+
+    // query di tutte le materie
+    const subjectsQuery = `
+      SELECT sj.id_subject, sj.subject_name 
+      FROM subjects sj
+      ORDER BY sj.subject_name;
+    `;
+
+    const [subjectsRow] = await promiseConnection.execute(subjectsQuery); // Await the query
+
+    // query di tutti i feedback
+    const feedbacksQuery = `
+      SELECT fb.id_feedback, fb.feedback_text, fb.feedback_rating, CONCAT(s.student_name, " " ,s.student_surname) as student_name_surname, fb.feedback_date, sj.subject_name
+      FROM subjects sj
+      INNER JOIN feedbacks fb on fb.id_subject = sj.id_subject
+      INNER JOIN users u ON u.id_user = fb.id_user
+      INNER JOIN students s ON s.id_student = u.id_user
+      ORDER BY DATE_FORMAT(fb.feedback_date, '%Y-%m') DESC;
+    `;
+
+    const [feedbacksRow] = await promiseConnection.execute(feedbacksQuery); // Await the query
+
+    // query di tutte le materie
+    const subjectsAveragesQuery = `
+      SELECT AVG(fb.feedback_rating), fb.feedback_date, sj.id_subject
+      FROM subjects sj
+      INNER JOIN feedbacks fb on fb.id_subject = sj.id_subject
+      WHERE sj.id_subject = 1
+      GROUP BY sj.subject_name, fb.feedback_date;
+   `;
+
+    const [subjectsAveragesRow] = await promiseConnection.execute(
+      subjectsAveragesQuery
+    ); // Await the query
+
+    console.log([feedbacksRow]);
+    console.log([subjectsRow]);
+    console.log([subjectsAveragesRow]);
+
+    res.render("admin.ejs", {
+      message: message,
+      feedbacks: [feedbacksRow],
+      subjects: [subjectsRow],
+      subjectsAverages: [subjectsAveragesRow],
+    });
+  } catch (error) {
+    console.log("Error executing query:", error);
+  }
+});
+
+app.post("/addAdmin", async (req, res) => {
+  try {
+    const username = req.body.admin_username;
+    const password = req.body.password;
+    const confirmPwd = req.body.confirmPwd;
+    console.log("submitted");
+
+    //query to get admin with username
+    const adminUserQuery = `
+    SELECT a.idadmin, a.admin_username, a.admin_password 
+    FROM admins a
+    WHERE a.admin_username = "${username}";
+  `;
+
+    //check if admin already exist
+    const [adminUserRow] = await promiseConnection.execute(adminUserQuery);
+
+    if (adminUserRow.length > 0) {
+      return res.redirect(
+        "/admin?message=that ausername is already being used&errormsg=true&section=add-admin"
+      );
+    }
+
+    //check if password match the confirmPwd
+    if (password !== confirmPwd) {
+      return res.redirect(
+        "/admin?message=password didn't match&errormsg=true&section=add-admin"
+      );
+    }
+
+    //hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("hashed password: ", hashedPassword);
+    //create the admin
+    const createAdminUser = `
+        INSERT INTO admins(admin_username, admin_password)
+        VALUES('${username}', '${hashedPassword}')
+      `;
+    const [createdRow] = await promiseConnection.execute(createAdminUser);
+
+    if (createdRow.affectedRows > 0) {
+      console.log("admin user created");
+      return res.redirect("/admin");
+    }
+  } catch (error) {
+    console.log("Error executing query:", error);
+  }
+});
+
+app.post("/adminLogin", async (req, res) => {
+  try {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    //query to get admin with username
+    const adminUserQuery = `
+    SELECT a.idadmin, a.admin_username, a.admin_password 
+    FROM admins a
+    WHERE a.admin_username = "${username}";
+  `;
+
+    const [adminUserRow] = await promiseConnection.execute(adminUserQuery); // Await the query
+    console.log([adminUserRow]);
+    if (adminUserRow.length > 0) {
+      const adminUser = adminUserRow[0];
+
+      //match hashed password in db with form password
+      const isCorrect = bcrypt.compare(password, adminUser.admin_password);
+      console.log("same password? ", isCorrect);
+
+      if (adminUser.admin_password === password) {
+        console.log("admin user found: ", adminUser);
+        res.redirect("/admin"); // Redirect to feedback on successful login
+      } else {
+        console.log(`Wrong password for admin user ${username}`);
+      }
+    } else {
+      console.log(`Admin user with username ${username} not found`);
     }
   } catch (error) {
     console.log("Error executing query:", error);

@@ -25,6 +25,15 @@
 */
 
 //qui andranno le date
+
+//      subjectsAveragesRow
+// {
+//   subject_average: '4.5000',
+//   feedback_date: 1969-12-31T23:00:00.000Z
+// }
+
+const divDatiNascosti = document.querySelector("#dati-nascosti");
+
 const xValues = [
   "12 / 02 / 2023",
   "30 / 03 / 2023",
