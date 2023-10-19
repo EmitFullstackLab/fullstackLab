@@ -14,6 +14,7 @@ const express = require("express");
 const app = express();
 app.set("view engine", "ejs"); //use ejs engine to display pages (in view directory)
 app.use(express.static("public")); //set visibility to public for css files
+app.use(express.static("js")); //set visibility to public for css files
 app.use(express.urlencoded({ extended: true })); //code to access form from request in post method
 
 /*------MYSQL CONFIG------*/
@@ -88,10 +89,10 @@ app.post("/login", async (req, res) => {
       const user = userRow[0];
 
       //match hashed password in db with form password
-      const isCorrect = bcrypt.compare(password, user.user_password);
+      const isCorrect = await bcrypt.compare(password, user.user_password);
       console.log("same password? ", isCorrect);
 
-      if (user.user_password === password) {
+      if (isCorrect) {
         console.log("user found: ", user);
         res.redirect("/feedback"); // Redirect to feedback on successful login
       } else {
