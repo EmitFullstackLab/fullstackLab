@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Form</title>
+    <link rel="stylesheet" href="/css/form.css" />
+  </head>
+  <body>
+    <div class="container">
+      <form action="submit">
+        <span class="form-title">USER LOGIN</span>
+        <div class="big-input-container">
+          <input type="email" id="email" name="email" placeholder="Email" />
+        </div>
+        <div class="inputs-container">
+          <div class="big-input-container">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+            />
+          </div>
+          <!-- <div class="small-input-container">
+            <input
+              type="password"
+              id="confirmPwd"
+              name="confirmPwd"
+              placeholder="Confirm your password"
+            />
+          </div> -->
+        </div>
+
+        <div class="submit-container">
+          <input
+            type="submit"
+            id="register-btn"
+            name="register-btn"
+            value="Sign In"
+          />
+        </div>
+        <span class="sub-link"
+          >Don't have an account yet?
+          <span class="clickable-span">SIGN UP!</span></span
+        >
+      </form>
+    </div>
+
+    <script src="../js/user.js"></script>
+  </body>
+</html>

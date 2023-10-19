@@ -1,0 +1,280 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  font-family: "Poppins", sans-serif;
+  /* outline: solid orange 1.5px; */
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background: rgb(255, 215, 0);
+  background: -moz-linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  background: linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffd700",endColorstr="#ffffff",GradientType=1);
+  overflow: hidden;
+}
+
+.register-form {
+  width: 500px;
+  min-height: 500px;
+  border-radius: 30px;
+  box-shadow: -10px 10px 27px 1px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: center;
+  background: rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.confirm-form {
+  width: 520px;
+  height: auto;
+  row-gap: 40px;
+  border-radius: 30px;
+  box-shadow: -10px 10px 27px 1px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  background-color: #fff;
+  position: relative;
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.big-input-container {
+  width: 100%;
+  box-shadow: -5px 5px 10px 1px rgba(0, 0, 0, 0.25);
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+}
+
+.inputs-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  flex-direction: row;
+}
+
+.small-input-container {
+  width: 48%;
+  height: 40px;
+  box-shadow: -5px 5px 10px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+input {
+  border: 0;
+  color: black;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  font-weight: 600;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+span.form-title {
+  align-self: center;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.submit-container {
+  width: 100px;
+  border-radius: 10px;
+  box-shadow: -5px 5px 10px 1px rgba(0, 0, 0, 0.25);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  align-self: end;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.submit-container input:hover {
+  background: rgb(255, 215, 0);
+  background: -moz-linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  background: linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffd700",endColorstr="#ffffff",GradientType=1);
+}
+
+input#register-btn {
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+span.sub-link {
+  align-self: end;
+  font-size: 0.8rem;
+}
+
+input::placeholder {
+  color: black;
+  display: flex;
+  justify-content: cente;
+  align-content: center;
+}
+
+span.clickable-span {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.group {
+  width: 45%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+}
+
+img.icon {
+  width: 13%;
+}
+
+.inputs-container.variant {
+  width: 80%;
+  align-self: center;
+}
+
+.submit-container.variant {
+  align-self: center;
+  overflow: hidden;
+}
+
+.submit-container.variant input {
+  cursor: pointer;
+}
+
+.form-description {
+  align-self: center;
+}
+
+.confirm-form-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.25);
+  z-index: 999;
+}
+
+img.icon.close-form {
+  position: absolute;
+  right: 20px;
+  height: 10%;
+  cursor: pointer;
+  width: auto;
+}
+
+.badjeej {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: rotate(-45deg);
+  position: absolute;
+  right: -90px;
+  bottom: -90px;
+  transition: 0.5s ease;
+}
+
+.badjeej img {
+  width: 100%;
+}
+
+.badjeej.active {
+  right: -15px;
+  bottom: -15px;
+}
+
+.error-container {
+  position: absolute;
+  top: 25px;
+  width: fit-content;
+  min-height: 50px;
+  height: fit-content;
+  border-radius: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s ease;
+  opacity: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: -10px 10px 27px 1px rgba(0, 0, 0, 0.25);
+}
+
+.error-container.active {
+  opacity: 1;
+}
+
+.error-text {
+  color: red;
+  font-weight: 600;
+}
