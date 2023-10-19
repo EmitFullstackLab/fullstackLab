@@ -14,7 +14,7 @@ const express = require("express");
 const app = express();
 app.set("view engine", "ejs"); //use ejs engine to display pages (in view directory)
 app.use(express.static("public")); //set visibility to public for css files
-app.use(express.urlencoded({ extended: false })); //code to access form from request in post method
+app.use(express.urlencoded({ extended: true })); //code to access form from request in post method
 
 /*------MYSQL CONFIG------*/
 const mysql = require("mysql2");
@@ -42,7 +42,12 @@ app.get("/message", (req, res) => {
 
 app.get("/register", (req, res) => {
   const message = req.query.message;
-  res.render("register.ejs", { message: message });
+  const errormsg = req.query.errormsg;
+  console.log(message);
+  res.render("register.ejs", {
+    message: message,
+    isActive: errormsg,
+  });
 });
 
 app.get("/login", (req, res) => {
@@ -79,8 +84,12 @@ app.post("/login", async (req, res) => {
 
     const [userRow] = await promiseConnection.execute(userQuery); // Await the query
 
-    if (userRow.affectedRows > 0) {
+    if (userRow.length > 0) {
       const user = userRow[0];
+
+      //match hashed password in db with form password
+      const isCorrect = bcrypt.compare(password, user.user_password);
+      console.log("same password? ", isCorrect);
 
       if (user.user_password === password) {
         console.log("user found: ", user);
@@ -105,49 +114,71 @@ app.post("/register", async (req, res) => {
     const password = req.body.password;
     const confirmPwd = req.body.confirmPwd;
 
-    // query to check if user already exist
+    // query to check if user already exist with that mail
     const userQuery = `
     SELECT u.id_user, u.user_email, u.user_password
     FROM users u
     WHERE u.user_email = "${email}";
   `;
 
-    // query to find student with those parameter
-    const studentQuery = `
-    SELECT s.id_student, s.student_name, s.student_surname, s.student_number
-    FROM students s
-    WHERE s.student_name = "${name}" AND s.student_surname = "${surname}" AND s.student_number = "${studNum}";
-  `;
+    // query to look for a student that match user by studNum
+    const checkStudNum = `
+      SELECT u.id_user, u.user_email, u.user_password 
+      FROM users u
+      INNER JOIN students s on s.id_student = u.id_user
+      WHERE s.student_number = "${studNum}";
+    `;
 
-    const [userRow] = await promiseConnection.execute(userQuery);
+    // query to find student with name/surname match with studNum
+    const studentQuery = `
+      SELECT s.id_student, s.student_name, s.student_surname, s.student_number
+      FROM students s
+      WHERE s.student_name = "${name}" AND s.student_surname = "${surname}" AND s.student_number = "${studNum}";
+    `;
 
     //check if user already exist
+    const [userRow] = await promiseConnection.execute(userQuery);
+
     if (userRow.length > 0) {
-      const user = userRow[0];
-      console.log("user: ", user);
-      return res.redirect(`/register?that email is already being used`);
-      // return res.redirect("/register?message=user already exists");
+      return res.redirect(
+        "/register?message=that email is already being used&errormsg=true"
+      );
+    }
+
+    //check if there's user linked with student with that student number
+    const [studNumRow] = await promiseConnection.execute(checkStudNum);
+
+    if (studNumRow.length > 0) {
+      return res.redirect(
+        "/register?message=that student number already has an associated user&errormsg=true"
+      );
     }
 
     const [studentRow] = await promiseConnection.execute(studentQuery);
 
-    console.log("studentRow", studentRow);
-    //check if password match the confirmPwd
-    if (password !== confirmPwd) {
-      console.log("sorry the password didn't match");
-      return res.redirect("/register?message=password didn't match");
+    if (studentRow.length === 0) {
+      return res.redirect(
+        "/register?message=no student number matching with that name and surname&errormsg=true"
+      );
     }
 
-    console.log("studentRow:", studentRow);
-    console.log("userRow:", userRow);
+    //check if password match the confirmPwd
+    if (password !== confirmPwd) {
+      return res.redirect(
+        "/register?message=password didn't match&errormsg=true"
+      );
+    }
 
-    //get the studentId
+    //if we get here, get the studentId and create the user
     const studentId = studentRow[0].id_student;
 
+    //hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("hashed password: ", hashedPassword);
     //create the user
     const createUser = `
         INSERT INTO users(id_user, user_email, user_password)
-        VALUES(${studentId}, '${email}', '${password}')
+        VALUES(${studentId}, '${email}', '${hashedPassword}')
       `;
     const [createdRow] = await promiseConnection.execute(createUser);
 
