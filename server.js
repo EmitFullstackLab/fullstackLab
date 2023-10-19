@@ -1,5 +1,6 @@
 /*------BCRYPT CONFIG------*/
 const bcrypt = require("bcrypt");
+const { log } = require("console");
 
 /*------ENVIRONMENT CONFIG------*/
 require("dotenv").config();
@@ -54,11 +55,6 @@ app.get("/register", (req, res) => {
 app.get("/login", (req, res) => {
   const message = req.query.message;
   res.render("login.ejs", { message: message });
-});
-
-app.get("/admin", (req, res) => {
-  const message = req.query.message;
-  res.render("admin.ejs", { message: message });
 });
 
 app.get("/admin_login", (req, res) => {
@@ -194,9 +190,19 @@ app.post("/register", async (req, res) => {
 
 /*
 
+    ___
+   /   \   |     |  |         |
+  |     |  |     |  |         |
+  |     |  |     |  |      \  |  /
+  |    \|  |     |  |       \ | /
+   \___/\   \___/   |        \|/
+
+
   funzioni di login e rigistrazione dell'admin
 
-  copia qusta parte sotto nel tuo codice
+  modificato il reindirizzamento alla pagina /admin
+
+  copia e modifica qusta parte sotto nel tuo codice main
 
   login admin non ancora funzionante
   
@@ -205,6 +211,59 @@ app.post("/register", async (req, res) => {
   ↓
 
 */
+
+app.get("/admin", async (req, res) => {
+  try {
+    const message = req.query.message;
+
+    // query di tutte le materie
+    const subjectsQuery = `
+      SELECT sj.id_subject, sj.subject_name 
+      FROM subjects sj
+      ORDER BY sj.subject_name;
+    `;
+
+    const [subjectsRow] = await promiseConnection.execute(subjectsQuery); // Await the query
+
+    // query di tutti i feedback
+    const feedbacksQuery = `
+      SELECT fb.id_feedback, fb.feedback_text, fb.feedback_rating, CONCAT(s.student_name, " " ,s.student_surname) as student_name_surname, fb.feedback_date, sj.subject_name
+      FROM subjects sj
+      INNER JOIN feedbacks fb on fb.id_subject = sj.id_subject
+      INNER JOIN users u ON u.id_user = fb.id_user
+      INNER JOIN students s ON s.id_student = u.id_user
+      ORDER BY DATE_FORMAT(fb.feedback_date, '%Y-%m') DESC;
+    `;
+
+    const [feedbacksRow] = await promiseConnection.execute(feedbacksQuery); // Await the query
+
+    // query di tutte le materie
+    const subjectsAveragesQuery = `
+      SELECT AVG(fb.feedback_rating), fb.feedback_date, sj.id_subject
+      FROM subjects sj
+      INNER JOIN feedbacks fb on fb.id_subject = sj.id_subject
+      WHERE sj.id_subject = 1
+      GROUP BY sj.subject_name, fb.feedback_date;
+   `;
+
+    const [subjectsAveragesRow] = await promiseConnection.execute(
+      subjectsAveragesQuery
+    ); // Await the query
+
+    console.log([feedbacksRow]);
+    console.log([subjectsRow]);
+    console.log([subjectsAveragesRow]);
+
+    res.render("admin.ejs", {
+      message: message,
+      feedbacks: [feedbacksRow],
+      subjects: [subjectsRow],
+      subjectsAverages: [subjectsAveragesRow],
+    });
+  } catch (error) {
+    console.log("Error executing query:", error);
+  }
+});
 
 app.post("/addAdmin", async (req, res) => {
   try {
