@@ -60,9 +60,10 @@
         </div>
         <div class="feedbacks-average-container">
           <div
-            averages=" <%subjectsAverages[0].forEach(subjectAverage => {%><%= subjectAverage.subject_average %><%=','%><%})%>"
-            dates=" <%subjectsAverages[0].forEach(subjectAverage => {%><%= subjectAverage.feedback_date %><%=','%><%})%>"
-            id="dati-nascosti"
+            averages=" <%subjectsAverages[0].forEach(subjectAverage => {%><%= subjectAverage.subjects_averages %><%=','%><%})%>"
+            dates=" <%subjectsAverages[0].forEach(subjectAverage => {%><%= subjectAverage.formatted_date %><%=','%><%})%>"
+            subjectsId=" <%subjectsAverages[0].forEach(subjectAverage => {%><%= subjectAverage.id_subject %><%=','%><%})%>"
+            id="dati-nascosti-averages"
           ></div>
           <div class="filters-container">
             <div class="filter-container">
@@ -89,6 +90,12 @@
           </div>
         </div>
         <div class="view-feedbacks-container active">
+          <div
+            ratings=" <%feedbacks[0].forEach(feedback => {%><%= feedback.feedback_rating %><%=','%><%})%>"
+            dates=" <%feedbacks[0].forEach(feedback => {%><%= feedback.formatted_date %><%=','%><%})%>"
+            subjectsId=" <%feedbacks[0].forEach(feedback => {%><%= feedback.id_subject %><%=','%><%})%>"
+            id="dati-nascosti-feedbacks"
+          ></div>
           <div class="filters-container">
             <div class="filter-container">
               <span class="filter-title">SUBJECTS</span>
@@ -105,6 +112,7 @@
               <span class="filter-title">ORDER BY</span>
               <select name="order-by" id="order-by">
                 <option value="most-recent">Most recent</option>
+                <option value="most-old">Most old</option>
                 <option value="from-highest-to-lowest">
                   From highest to lowest
                 </option>
@@ -117,7 +125,12 @@
           <div class="feedbacks-container-main">
             <div class="feedbacks-container">
               <% feedbacks[0].forEach(feedback => {%>
-              <div class="feedback-card">
+              <div
+                class="feedback-card"
+                idFeedback="<%= feedback.id_subject %>"
+                feedbackDate="<%= feedback.formatted_date %>"
+                feedbackRating="<%= feedback.feedback_rating %>"
+              >
                 <div class="feedback-title"><%= feedback.subject_name %></div>
                 <div class="rate-container">
                   <svg
@@ -126,50 +139,7 @@
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="2"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="3"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                    />
-                  </svg>
-                  <svg
-                    data-value="5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
+                    style="fill: rgb(255, 215, 0)"
                   >
                     <path
                       d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
@@ -183,7 +153,7 @@
                   ><%= feedback.student_name_surname %></span
                 >
                 <span class="feedback-autor"
-                  ><%= feedback.feedback_date %></span
+                  ><%= feedback.formatted_date %></span
                 >
               </div>
               <% }) %>

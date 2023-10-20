@@ -6,13 +6,74 @@
   ↓
   ↓
 
-
-
-
-
-
-
 */
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Seleziona le select
+  var subjectSelect = document.getElementById("subject-view");
+  var orderBySelect = document.getElementById("order-by");
+
+  // Seleziona tutti i div feedback-card
+  var feedbackCards = document.querySelectorAll(".feedback-card");
+
+  // Aggiungi un gestore di eventi all'evento "change" della select del soggetto
+  subjectSelect.addEventListener("change", function () {
+    var selectedValue = subjectSelect.value;
+
+    // Itera su tutti i div feedback-card e nascondi/quelli che non corrispondono al valore selezionato
+    feedbackCards.forEach(function (card) {
+      var idFeedback = card.getAttribute("idfeedback");
+      if (selectedValue === "ALL" || selectedValue === idFeedback) {
+        card.style.display = "block"; // Mostra il div
+      } else {
+        card.style.display = "none"; // Nascondi il div
+      }
+    });
+  });
+
+  // Aggiungi un gestore di eventi all'evento "change" della select dell'ordinamento
+  orderBySelect.addEventListener("change", function () {
+    var selectedValue = orderBySelect.value;
+
+    // Seleziona il div padre per ordinare i figli
+    var parentDiv = document.querySelector(".feedback-card");
+    var children = Array.from(parentDiv.children);
+
+    // Ordina i div feedback-card in base all'opzione selezionata
+    if (selectedValue === "most-recent") {
+      children.sort(function (a, b) {
+        return (
+          new Date(a.getAttribute("feedbackdate")) -
+          new Date(b.getAttribute("feedbackdate"))
+        );
+      });
+    } else if (selectedValue === "most-old") {
+      children.sort(function (a, b) {
+        return (
+          new Date(b.getAttribute("feedbackdate")) -
+          new Date(a.getAttribute("feedbackdate"))
+        );
+      });
+    } else if (selectedValue === "from-highest-to-lowest") {
+      children.sort(function (a, b) {
+        return (
+          b.getAttribute("feedbackrating") - a.getAttribute("feedbackrating")
+        );
+      });
+    } else if (selectedValue === "from-lowest-to-highest") {
+      children.sort(function (a, b) {
+        return (
+          a.getAttribute("feedbackrating") - b.getAttribute("feedbackrating")
+        );
+      });
+    }
+
+    // Appendi i div figli nell'ordine desiderato
+    children.forEach(function (child) {
+      parentDiv.appendChild(child);
+    });
+  });
+});
 
 /*
 
@@ -24,77 +85,59 @@
 
 */
 
-//qui andranno le date
+function filterArray(array, selected) {
+  const filtered = array.filter((obj) => {
+    // Utilizzo trim() per rimuovere eventuali spazi bianchi dall'ID
+    return obj.id.trim() === selected.trim();
+  });
+  return filtered;
+}
 
-//      subjectsAveragesRow
-// {
-//   subject_average: '4.5000',
-//   feedback_date: 1969-12-31T23:00:00.000Z
-// }
+function chartVars(arrayFiltered) {
+  const x = [];
+  const y = [];
+  arrayFiltered.forEach((el) => {
+    x.push(el.date);
+    y.push(el.average);
+  });
+  const values = [x, y];
+  return values;
+}
 
-const divDatiNascosti = document.querySelector("#dati-nascosti");
+const divDatiNascostiAverages = document.querySelector(
+  "#dati-nascosti-averages"
+);
 
-const xValues = [
-  "12 / 02 / 2023",
-  "30 / 03 / 2023",
-  "23 / 04 / 2023",
-  "06 / 05 / 2023",
-  "15 / 06 / 2023",
-  "29 / 07 / 2023",
-  "01 / 08 / 2023",
-  "06 / 09 / 2023",
-  "15 / 10 / 2023",
-  "29 / 11 / 2023",
-  "01 / 12 / 2023",
-  "06 / 01 / 2024",
-  "15 / 02 / 2024",
-  "29 / 03 / 2024",
-  "01 / 04 / 2024",
-];
+const averages = divDatiNascostiAverages.getAttribute("averages").slice(0, -1);
+const dates = divDatiNascostiAverages.getAttribute("dates").slice(0, -1);
+const subjectsId = divDatiNascostiAverages
+  .getAttribute("subjectsId")
+  .slice(0, -1);
 
-// qui andranno le varie medie che escono raggruppando i feedback_rate per data (mese e anno)
-const yValues = [1, 5, 3, 3.5, 2, 5, 4.7, 5, 4, 0, 2, 4.5, 1, 2, 2.5, 3];
+// Splitta la stringa in un array utilizzando la virgola come delimitatore
+const arrayAverages = averages.split(",");
+const arrayDates = dates.split(",");
+const arraySubjectsId = subjectsId.split(",");
 
-const subjectSelect = document.querySelector("#subject-average");
-
-// alla selezione di una nuova materia nella section verrà cambiato il grafico
-subjectSelect.addEventListener("change", () => {
-  //qui andranno le date
-  const xValues = [
-    "12 / 02 / 2023",
-    "30 / 03 / 2023",
-    "23 / 04 / 2023",
-    "06 / 05 / 2023",
-    "15 / 06 / 2023",
-    "29 / 07 / 2023",
-    "01 / 08 / 2023",
-    "06 / 09 / 2023",
-    "15 / 10 / 2023",
-    "29 / 11 / 2023",
-    "01 / 12 / 2023",
-    "06 / 01 / 2024",
-    "15 / 02 / 2024",
-    "29 / 03 / 2024",
-    "01 / 04 / 2024",
-  ];
-
-  // qui andranno le varie medie che escono raggruppando i feedback_rate per data (mese e anno)
-  const yValues = [1, 5, 3, 3.5, 2, 5, 4.7, 5, 4, 0, 2, 4.5, 1, 2, 2.5, 3];
-
-  changeChart(xValues, yValues);
+let averageObjectsArray = [];
+arrayAverages.forEach((average, index) => {
+  let obj = {
+    average: parseFloat(average),
+    date: arrayDates[index],
+    id: arraySubjectsId[index],
+  };
+  averageObjectsArray.push(obj);
 });
 
-function changeChart(xValues, yValues) {
-  // qui andranno le date (mese e anno)
-
+function changeChart(xDatesValues, yAveragesValues) {
   new Chart("myChart", {
     type: "line",
     data: {
-      labels: xValues,
+      labels: xDatesValues,
       datasets: [
         {
           backgroundColor: "rgba(255,255,255,.5)",
-          data: yValues,
+          data: yAveragesValues,
           fill: true,
           label: "Subject feedback rate average",
           borderColor: "rgb(75, 192, 192)",
@@ -116,6 +159,30 @@ function changeChart(xValues, yValues) {
     },
   });
 }
+
+const subjectSelect = document.querySelector("#subject-average");
+let subjectSelected = subjectSelect.value;
+
+const filteredArray = filterArray(averageObjectsArray, subjectSelected);
+
+const startValues = chartVars(filteredArray);
+
+const xValues = startValues[0];
+const yValues = startValues[1];
+
+// alla selezione di una nuova materia nella section verrà cambiato il grafico
+subjectSelect.addEventListener("change", () => {
+  const newSubjectSelected = subjectSelect.value;
+
+  const newArrayFiltered = filterArray(averageObjectsArray, newSubjectSelected);
+
+  const changedValues = chartVars(newArrayFiltered);
+
+  const xDates = changedValues[0];
+  const yAverages = changedValues[1];
+
+  changeChart(xDates, yAverages);
+});
 
 changeChart(xValues, yValues);
 

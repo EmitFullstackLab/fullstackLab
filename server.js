@@ -225,24 +225,24 @@ app.get("/admin", async (req, res) => {
 
     // query di tutti i feedback
     const feedbacksQuery = `
-      SELECT fb.id_feedback, fb.feedback_text, fb.feedback_rating, CONCAT(s.student_name, " " ,s.student_surname) as student_name_surname, fb.feedback_date, sj.subject_name
+      SELECT fb.id_feedback, fb.feedback_text, fb.feedback_rating, CONCAT(s.student_name, " " ,s.student_surname) as student_name_surname,  DATE_FORMAT(fb.feedback_date, '%Y-%m-%d') AS formatted_date, sj.subject_name, sj.id_subject
       FROM subjects sj
       INNER JOIN feedbacks fb on fb.id_subject = sj.id_subject
       INNER JOIN users u ON u.id_user = fb.id_user
       INNER JOIN students s ON s.id_student = u.id_user
-      ORDER BY DATE_FORMAT(fb.feedback_date, '%Y-%m') DESC;
+      ORDER BY formatted_date DESC;
     `;
 
     const [feedbacksRow] = await promiseConnection.execute(feedbacksQuery); // Await the query
 
     // query di tutte le materie
     const subjectsAveragesQuery = `
-      SELECT AVG(fb.feedback_rating), fb.feedback_date, sj.id_subject
+      SELECT AVG(fb.feedback_rating) as subjects_averages, DATE_FORMAT(fb.feedback_date, '%Y-%m') AS formatted_date, sj.id_subject
       FROM subjects sj
-      INNER JOIN feedbacks fb on fb.id_subject = sj.id_subject
-      WHERE sj.id_subject = 1
-      GROUP BY sj.subject_name, fb.feedback_date;
-   `;
+      INNER JOIN feedbacks fb ON fb.id_subject = sj.id_subject
+      GROUP BY sj.subject_name, formatted_date
+      ORDER BY formatted_date;
+    `;
 
     const [subjectsAveragesRow] = await promiseConnection.execute(
       subjectsAveragesQuery
