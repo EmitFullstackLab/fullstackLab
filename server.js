@@ -13,6 +13,8 @@ const PASSWORD = process.env.MYSQL_PASSWORD;
 /*------EXPRESS + EJS CONFIG------*/
 const express = require("express");
 const app = express();
+const feedbackRouter = require("./routes/feedbackRouter");
+app.use("/feedback", feedbackRouter);
 app.set("view engine", "ejs"); //use ejs engine to display pages (in view directory)
 app.use(express.static("public")); //set visibility to public for css files
 app.use(express.static("js")); //set visibility to public for css files
@@ -37,14 +39,8 @@ app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
-app.get("/message", (req, res) => {
-  const message = req.query.message;
-  res.render("message.ejs", { message: message });
-});
-
 app.get("/register", (req, res) => {
-  const message = req.query.message;
-  const errormsg = req.query.errormsg;
+  const { message, errormsg } = req.query;
   console.log(message);
   res.render("register.ejs", {
     message: message,
@@ -53,8 +49,12 @@ app.get("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  const message = req.query.message;
-  res.render("login.ejs", { message: message });
+  const { message, errormsg } = req.query;
+  console.log(message);
+  res.render("login.ejs", {
+    message: message,
+    isActive: errormsg,
+  });
 });
 
 app.get("/admin_login", (req, res) => {
@@ -62,15 +62,14 @@ app.get("/admin_login", (req, res) => {
   res.render("admin_login.ejs", { message: message });
 });
 
-app.get("/feedback", (req, res) => {
-  const message = req.query.message;
-  res.render("feedback.ejs", { message: message });
-});
+// app.get("/feedback", (req, res) => {
+//   const message = req.query.message;
+//   res.render("feedback.ejs", { message: message });
+// });
 
 app.post("/login", async (req, res) => {
   try {
-    const email = req.body.email;
-    const password = req.body.password;
+    const { email, password } = req.body;
 
     //query to get user with email
     const userQuery = `
@@ -92,10 +91,14 @@ app.post("/login", async (req, res) => {
         console.log("user found: ", user);
         res.redirect("/feedback"); // Redirect to feedback on successful login
       } else {
-        console.log(`Wrong password for user ${email}`);
+        return res.redirect(
+          "/login?message=password didn't match&errormsg=true"
+        );
       }
     } else {
-      console.log(`User with email ${email} not found`);
+      return res.redirect(
+        "/login?message=no user with that email found&errormsg=true"
+      );
     }
   } catch (error) {
     console.log("Error executing query:", error);
@@ -104,12 +107,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    const email = req.body.email;
-    const name = req.body.name;
-    const surname = req.body.surname;
-    const studNum = req.body.studNum;
-    const password = req.body.password;
-    const confirmPwd = req.body.confirmPwd;
+    const { email, name, surname, studNum, password, confirmPwd } = req.body;
 
     // query to check if user already exist with that mail
     const userQuery = `

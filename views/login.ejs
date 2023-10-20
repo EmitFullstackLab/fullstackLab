@@ -8,12 +8,15 @@
     <link rel="stylesheet" href="/form.css" />
   </head>
   <body>
-    <form action="/login" method="POST" class="register-form">
-      <span class="form-title">USER LOGIN</span>
-      <% if (message) { %>
-      <div class="alert"><%= message %></div>
-      <% } %>
+    <%if(locals.isActive){ %>
+    <div class="error-container active">
+      <span class="error-text">
+        <% if (message) { %> <%= message %> <% } %>
+      </span>
+    </div>
+    <% }%>
 
+    <form action="/login" method="POST" class="register-form">
       <div class="big-input-container">
         <input type="email" id="email" name="email" placeholder="Email" />
       </div>
