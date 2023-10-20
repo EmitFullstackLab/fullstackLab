@@ -133,8 +133,19 @@ body {
   align-items: center;
 }
 
-#dati-nascosti {
+#dati-nascosti-averages {
   display: none;
+  visibility: hidden;
+}
+
+#dati-nascosti-feedbacks {
+  display: none;
+  visibility: hidden;
+}
+
+.feedback-autor {
+  width: 100%;
+  display: flex;
 }
 
 .filter-container select {
