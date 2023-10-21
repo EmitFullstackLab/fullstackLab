@@ -203,6 +203,7 @@ const feedbacksAverageContainer = document.querySelector(
   ".feedbacks-average-container"
 );
 const addAdmin = document.querySelector("#add-admin");
+const adminLogout = document.querySelector("#admin-logout");
 const addAdminContainer = document.querySelector(".add-admin-container");
 
 viewFeedbacks.addEventListener("click", () => {
@@ -230,6 +231,10 @@ addAdmin.addEventListener("click", () => {
   viewFeedbacks.classList.remove("active");
   addAdmin.classList.add("active");
   addAdminContainer.classList.add("active");
+});
+
+adminLogout.addEventListener("click", () => {
+  window.location.href = "/logout";
 });
 
 /*

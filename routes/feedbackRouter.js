@@ -1,21 +1,22 @@
-const express = require("express");
-const app = express();
+// const express = require("express");
 
-const router = express.Router();
+// const router = express.Router();
 
-// router.get("/", (req, res) => {
+// router.get("/feedback", (req, res) => {
+//   const message = req.query.message;
 //   console.log("router for feedback working");
-//   res.render("/feeback.ejs");
+//   res.render("feedback.ejs", { message: message });
 // });
 
-router.get("/", (req, res) => {
-  const message = req.query.message;
-  console.log("router for feedback working");
-  res.render("feedback.ejs", { message: message });
-});
+// //check if there's a user with that id
 
-router.get("/:id", (req, res) => {
-  console.log("need the session id");
-});
+// router.get("/feedback/:id", (req, res) => {
+//   const id = req.params.id;
+//   const userId = req.session.user.id_user;
+//   const message = `welcome user with id ${userId}`;
+//   console.log("User ID from session: ", userId);
+//   console.log("Requested ID: ", id);
+//   res.render("feedback.ejs", { message: message });
+// });
 
-module.exports = router;
+// module.exports = router;
