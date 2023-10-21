@@ -55,6 +55,7 @@ form {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .inputs-container {
@@ -74,6 +75,7 @@ form {
   display: flex;
   align-items: center;
   padding: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 input {
@@ -86,9 +88,10 @@ input {
   align-items: center;
   justify-content: center;
   align-content: center;
+  background: none;
 }
 
-span.form-title {
+input span.form-title {
   align-self: center;
   font-size: 1.3rem;
   font-weight: 600;
@@ -158,4 +161,34 @@ span.clickable-span:hover {
   text-decoration: underline;
   font-size: large;
   color: red;
+}
+
+.error-container {
+  position: absolute;
+  top: 25px;
+  width: fit-content;
+  min-height: 50px;
+  height: fit-content;
+  border-radius: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s ease;
+  opacity: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: -10px 10px 27px 1px rgba(0, 0, 0, 0.25);
+}
+
+.error-container.active {
+  opacity: 1;
+}
+
+.error-text {
+  color: red;
+  font-weight: 600;
 }
