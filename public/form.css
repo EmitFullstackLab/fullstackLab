@@ -14,6 +14,23 @@ body {
   justify-content: center;
   align-items: center;
   align-content: center;
+  background: rgb(255, 215, 0);
+  background: -moz-linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(246, 223, 158, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(246, 223, 158, 1) 100%
+  );
+  background: linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(246, 223, 158, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffd700",endColorstr="#f6df9e",GradientType=1);
 }
 
 form {
@@ -26,6 +43,9 @@ form {
   flex-direction: column;
   justify-content: space-between;
   align-content: center;
+  background: rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   row-gap: 35px;
 }
 
@@ -73,6 +93,7 @@ input {
   justify-content: center;
   align-content: center;
   background: none;
+  background-color: none;
 }
 
 input span.form-title {
@@ -91,6 +112,25 @@ input span.form-title {
   justify-content: center;
   align-content: center;
   align-self: end;
+}
+.submit-container input:hover {
+  background: rgb(255, 215, 0);
+  background: -moz-linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(246, 223, 158, 1) 100%
+  );
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(246, 223, 158, 1) 100%
+  );
+  background: linear-gradient(
+    45deg,
+    rgba(255, 215, 0, 1) 0%,
+    rgba(246, 223, 158, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffd700",endColorstr="#f6df9e",GradientType=1);
 }
 
 input#register-btn {
