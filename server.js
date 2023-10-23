@@ -1,6 +1,5 @@
 /*------BCRYPT CONFIG------*/
 const bcrypt = require("bcrypt");
-const { log } = require("console");
 
 /*------ENVIRONMENT CONFIG------*/
 require("dotenv").config();
@@ -13,10 +12,23 @@ const PASSWORD = process.env.MYSQL_PASSWORD;
 /*------EXPRESS + EJS CONFIG------*/
 const express = require("express");
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); //code to access form from request in post method
+const session = require("express-session");
+app.use(
+  session({
+    secret: "secret_key", //used to sign the session ID cookie
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
 app.set("view engine", "ejs"); //use ejs engine to display pages (in view directory)
 app.use(express.static("public")); //set visibility to public for css files
 app.use(express.static("js")); //set visibility to public for css files
-app.use(express.urlencoded({ extended: true })); //code to access form from request in post method
+
+// const feedbackRouter = require("./routes/feedbackRouter");
+// app.use("/feedback", feedbackRouter);
 
 /*------MYSQL CONFIG------*/
 const mysql = require("mysql2");
@@ -33,13 +45,40 @@ const promiseConnection = connection.promise();
 
 /*--------------------------------*/
 
+/*-------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------- HOME PAGE ------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------*/
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
-app.get("/message", (req, res) => {
-  const message = req.query.message;
-  res.render("message.ejs", { message: message });
+/*-------------------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------- LOG OUT -------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------*/
+app.get("/logout", (req, res) => {
+  if (req.session.user) {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+      }
+      res.redirect("/"); // Redirect to home page after logout
+    });
+  } else if (req.session.admin) {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+      }
+      res.redirect("/admin_login"); // Redirect to home page after logout
+    });
+  } else {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+      }
+      res.redirect("/"); // Redirect to home page after logout
+      console.log("ma chi stracazzo sei?");
+    });
+  }
 });
 
 app.get("/register", (req, res) => {
@@ -85,7 +124,7 @@ app.post("/login", async (req, res) => {
       const user = userRow[0];
 
       //match hashed password in db with form password
-      const isCorrect = bcrypt.compare(password, user.user_password);
+      const isCorrect = await bcrypt.compare(password, user.user_password);
       console.log("same password? ", isCorrect);
 
       if (user.user_password === password) {
@@ -250,10 +289,6 @@ app.get("/admin", async (req, res) => {
       subjectsAveragesQuery
     ); // Await the query
 
-    console.log([feedbacksRow]);
-    console.log([subjectsRow]);
-    console.log([subjectsAveragesRow]);
-
     res.render("admin.ejs", {
       message: message,
       feedbacks: [feedbacksRow],
@@ -332,11 +367,16 @@ app.post("/adminLogin", async (req, res) => {
       const adminUser = adminUserRow[0];
 
       //match hashed password in db with form password
-      const isCorrect = bcrypt.compare(password, adminUser.admin_password);
+      const isCorrect = await bcrypt.compare(
+        password,
+        adminUser.admin_password
+      );
       console.log("same password? ", isCorrect);
 
-      if (adminUser.admin_password === password) {
+      if (isCorrect) {
         console.log("admin user found: ", adminUser);
+        req.session.admin = adminUser;
+        console.log(req.session.admin);
         res.redirect("/admin"); // Redirect to feedback on successful login
       } else {
         console.log(`Wrong password for admin user ${username}`);

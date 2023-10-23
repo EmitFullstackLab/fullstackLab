@@ -10,67 +10,26 @@
 
 document.addEventListener("DOMContentLoaded", function () {
   // Seleziona le select
-  var subjectSelect = document.getElementById("subject-view");
-  var orderBySelect = document.getElementById("order-by");
+  var subjectSelectView = document.getElementById("subject-view");
 
   // Seleziona tutti i div feedback-card
   var feedbackCards = document.querySelectorAll(".feedback-card");
 
   // Aggiungi un gestore di eventi all'evento "change" della select del soggetto
-  subjectSelect.addEventListener("change", function () {
-    var selectedValue = subjectSelect.value;
+  subjectSelectView.addEventListener("change", function () {
+    var selectedValueSubject = subjectSelectView.value;
 
     // Itera su tutti i div feedback-card e nascondi/quelli che non corrispondono al valore selezionato
     feedbackCards.forEach(function (card) {
       var idFeedback = card.getAttribute("idfeedback");
-      if (selectedValue === "ALL" || selectedValue === idFeedback) {
+      if (
+        selectedValueSubject === "ALL" ||
+        selectedValueSubject === idFeedback
+      ) {
         card.style.display = "block"; // Mostra il div
       } else {
         card.style.display = "none"; // Nascondi il div
       }
-    });
-  });
-
-  // Aggiungi un gestore di eventi all'evento "change" della select dell'ordinamento
-  orderBySelect.addEventListener("change", function () {
-    var selectedValue = orderBySelect.value;
-
-    // Seleziona il div padre per ordinare i figli
-    var parentDiv = document.querySelector(".feedback-card");
-    var children = Array.from(parentDiv.children);
-
-    // Ordina i div feedback-card in base all'opzione selezionata
-    if (selectedValue === "most-recent") {
-      children.sort(function (a, b) {
-        return (
-          new Date(a.getAttribute("feedbackdate")) -
-          new Date(b.getAttribute("feedbackdate"))
-        );
-      });
-    } else if (selectedValue === "most-old") {
-      children.sort(function (a, b) {
-        return (
-          new Date(b.getAttribute("feedbackdate")) -
-          new Date(a.getAttribute("feedbackdate"))
-        );
-      });
-    } else if (selectedValue === "from-highest-to-lowest") {
-      children.sort(function (a, b) {
-        return (
-          b.getAttribute("feedbackrating") - a.getAttribute("feedbackrating")
-        );
-      });
-    } else if (selectedValue === "from-lowest-to-highest") {
-      children.sort(function (a, b) {
-        return (
-          a.getAttribute("feedbackrating") - b.getAttribute("feedbackrating")
-        );
-      });
-    }
-
-    // Appendi i div figli nell'ordine desiderato
-    children.forEach(function (child) {
-      parentDiv.appendChild(child);
     });
   });
 });
@@ -203,6 +162,7 @@ const feedbacksAverageContainer = document.querySelector(
   ".feedbacks-average-container"
 );
 const addAdmin = document.querySelector("#add-admin");
+const adminLogout = document.querySelector("#admin-logout");
 const addAdminContainer = document.querySelector(".add-admin-container");
 
 viewFeedbacks.addEventListener("click", () => {
@@ -240,11 +200,8 @@ addAdmin.addEventListener("click", () => {
   ↓
   ↓
 
-<span class="sidebar-text" id="add-admin">ADD ADMIN</span>
-<div class="add-admin-container">
-
-
-
-
-
 */
+
+adminLogout.addEventListener("click", () => {
+  window.location.href = "/logout";
+});

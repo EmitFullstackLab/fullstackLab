@@ -90,12 +90,6 @@
           </div>
         </div>
         <div class="view-feedbacks-container active">
-          <div
-            ratings=" <%feedbacks[0].forEach(feedback => {%><%= feedback.feedback_rating %><%=','%><%})%>"
-            dates=" <%feedbacks[0].forEach(feedback => {%><%= feedback.formatted_date %><%=','%><%})%>"
-            subjectsId=" <%feedbacks[0].forEach(feedback => {%><%= feedback.id_subject %><%=','%><%})%>"
-            id="dati-nascosti-feedbacks"
-          ></div>
           <div class="filters-container">
             <div class="filter-container">
               <span class="filter-title">SUBJECTS</span>
@@ -133,6 +127,7 @@
               >
                 <div class="feedback-title"><%= feedback.subject_name %></div>
                 <div class="rate-container">
+                  <% for(let i = 0; i < 5; i++) { %>
                   <svg
                     data-value="1"
                     xmlns="http://www.w3.org/2000/svg"
@@ -145,6 +140,7 @@
                       d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
                     />
                   </svg>
+                  <% } %>
                 </div>
                 <div class="feedback-text-container">
                   <p class="feedback-text"><%= feedback.feedback_text %></p>
