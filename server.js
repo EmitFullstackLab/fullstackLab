@@ -45,6 +45,31 @@ const promiseConnection = connection.promise();
 
 /*--------------------------------*/
 
+// app.get("/verification", (req, res) => {
+//   res.render("verification.ejs");
+// });
+
+app.post("/verification", async (req, res) => {
+  const code = req.body.verificationCode;
+  //get data sent from register form
+  const { generatedCode, hashedPassword, studentId, email } = req.session;
+
+  if (code === generatedCode) {
+    //create the user
+    const createUser = `
+      INSERT INTO users(id_user, user_email, user_password)
+      VALUES(${studentId}, '${email}', '${hashedPassword}')
+    `;
+    const [createdRow] = await promiseConnection.execute(createUser);
+
+    if (createdRow.affectedRows > 0) {
+      return res.redirect("/login");
+    }
+  }
+
+  console.log("inserisco user");
+});
+
 /*-------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------- HOME PAGE ------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------*/
@@ -70,7 +95,6 @@ app.get("/logout", (req, res) => {
 
 app.get("/login", (req, res) => {
   const { message, errormsg } = req.query;
-  console.log(message);
   res.render("login.ejs", {
     message: message,
     isActive: errormsg,
@@ -80,7 +104,6 @@ app.get("/login", (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("req.body: ", req.body);
 
     //query to get user with email
     const userQuery = `
@@ -96,12 +119,9 @@ app.post("/login", async (req, res) => {
 
       //match hashed password in db with form password
       const isCorrect = await bcrypt.compare(password, user.user_password);
-      console.log("same password? ", isCorrect);
 
       if (isCorrect) {
-        console.log("user found: ", user);
         req.session.user = user;
-        console.log("req.session: ", req.session);
 
         res.redirect("/feedback"); // Redirect to feedback on successful login
       } else {
@@ -124,11 +144,11 @@ app.post("/login", async (req, res) => {
 /*-------------------------------------------------------------------------------------------------------------------------------*/
 
 app.get("/register", (req, res) => {
-  const { message, errormsg } = req.query;
-  console.log(message);
+  const { message, errormsg, isOpen } = req.query;
   res.render("register.ejs", {
     message: message,
     isActive: errormsg,
+    isOpen: isOpen,
   });
 });
 
@@ -191,23 +211,22 @@ app.post("/register", async (req, res) => {
       );
     }
 
-    //if we get here, get the studentId and create the user
-    const studentId = studentRow[0].id_student;
+    //everything is correct and the password is the same
+    //get data for user and go to verification page
+    const generatedCode = "0000";
+    req.session.generatedCode = generatedCode;
 
-    //hash password
+    //hash password and save in session
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("hashed password: ", hashedPassword);
-    //create the user
-    const createUser = `
-        INSERT INTO users(id_user, user_email, user_password)
-        VALUES(${studentId}, '${email}', '${hashedPassword}')
-      `;
-    const [createdRow] = await promiseConnection.execute(createUser);
+    req.session.hashedPassword = hashedPassword;
+    //save user id in session
+    const studentId = studentRow[0].id_student;
+    req.session.studentId = studentId;
 
-    if (createdRow.affectedRows > 0) {
-      console.log("user created");
-      return res.redirect("/login");
-    }
+    //save email in session
+    req.session.email = email;
+
+    return res.render("verification.ejs");
   } catch (error) {
     console.log("Error executing query:", error);
   }
@@ -234,7 +253,6 @@ app.get("/feedback", async (req, res) => {
     `;
 
     const [studentNameRow] = await promiseConnection.execute(studentNameQuery);
-    console.log("stud name: ", studentNameRow[0]);
     const studentName = studentNameRow[0].student_name;
     const message = `Welcome ${studentName}`;
 
@@ -257,9 +275,6 @@ app.get("/feedback", async (req, res) => {
       feedbackUserQuery
     );
 
-    console.log("all subject: ", allSubjects);
-    console.log("subject with feedback: ", subjectsWithFeedback);
-
     if (subjectsWithFeedback.length > 0) {
       // Get an array of subject IDs with feedback
       const subjectIdsWithFeedback = subjectsWithFeedback.map(
@@ -276,7 +291,6 @@ app.get("/feedback", async (req, res) => {
           subject_name: subject.subject_name,
         }));
 
-      console.log("subjectWithoutFeedback: ", subjectsWithoutFeedback);
       return res.render("feedback.ejs", {
         message: message,
         subjects: subjectsWithoutFeedback,
@@ -322,12 +336,7 @@ app.post("/feedback", async (req, res) => {
 
     const [addFeedback] = await promiseConnection.execute(addFeedbackQuery);
     if (addFeedback.affectedRows > 0) {
-      console.log("feedback added");
     }
-
-    console.log("insert into query: ", addFeedbackQuery);
-
-    console.log("feedback: ", feedback);
   }
 });
 
@@ -398,10 +407,6 @@ app.get("/admin", async (req, res) => {
       subjectsAveragesQuery
     ); // Await the query
 
-    console.log([feedbacksRow]);
-    console.log([subjectsRow]);
-    console.log([subjectsAveragesRow]);
-
     res.render("admin.ejs", {
       message: message,
       feedbacks: [feedbacksRow],
@@ -418,7 +423,6 @@ app.post("/addAdmin", async (req, res) => {
     const username = req.body.admin_username;
     const password = req.body.password;
     const confirmPwd = req.body.confirmPwd;
-    console.log("submitted");
 
     //query to get admin with username
     const adminUserQuery = `
@@ -445,7 +449,6 @@ app.post("/addAdmin", async (req, res) => {
 
     //hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("hashed password: ", hashedPassword);
     //create the admin
     const createAdminUser = `
         INSERT INTO admins(admin_username, admin_password)
@@ -454,7 +457,6 @@ app.post("/addAdmin", async (req, res) => {
     const [createdRow] = await promiseConnection.execute(createAdminUser);
 
     if (createdRow.affectedRows > 0) {
-      console.log("admin user created");
       return res.redirect("/admin");
     }
   } catch (error) {
@@ -475,16 +477,13 @@ app.post("/adminLogin", async (req, res) => {
   `;
 
     const [adminUserRow] = await promiseConnection.execute(adminUserQuery); // Await the query
-    console.log([adminUserRow]);
     if (adminUserRow.length > 0) {
       const adminUser = adminUserRow[0];
 
       //match hashed password in db with form password
       const isCorrect = bcrypt.compare(password, adminUser.admin_password);
-      console.log("same password? ", isCorrect);
 
       if (adminUser.admin_password === password) {
-        console.log("admin user found: ", adminUser);
         res.redirect("/admin"); // Redirect to feedback on successful login
       } else {
         console.log(`Wrong password for admin user ${username}`);

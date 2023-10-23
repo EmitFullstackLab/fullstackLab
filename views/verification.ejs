@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/form.css" />
+  </head>
+  <body>
+    <div class="confirm-form-container">
+      <form action="verification" method="POST" class="confirm-form">
+        <span class="form-title">VERIFICATION CODE</span>
+        <p class="form-description">
+          Please enter the verification code sent to your email address.
+        </p>
+        <div class="inputs-container variant">
+          <div class="small-input-container">
+            <input
+              type="text"
+              id="verification-code"
+              name="verificationCode"
+              placeholder="INSERT CODE"
+              maxlength="5"
+              required
+            />
+          </div>
+          <div class="group">
+            <span class="clickable-span">resend code</span>
+            <img src="mdi_email-resend-outline.svg" alt="" class="icon" />
+          </div>
+        </div>
+        <div class="submit-container variant">
+          <input
+            type="submit"
+            id="verification-code-btn"
+            name="verification-code-btn"
+            value="CONFIRM"
+          />
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
