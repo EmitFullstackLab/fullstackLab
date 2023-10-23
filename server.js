@@ -122,10 +122,7 @@ app.post("/login", async (req, res) => {
       const user = userRow[0];
 
       //match hashed password in db with form password
-      const isCorrect = await await bcrypt.compare(
-        password,
-        user.user_password
-      );
+      const isCorrect = await bcrypt.compare(password, user.user_password);
       console.log("same password? ", isCorrect);
 
       if (isCorrect) {
@@ -401,7 +398,7 @@ app.get("/admin", async (req, res) => {
 
       // query di tutti i feedback
       const feedbacksQuery = `
-      SELECT fb.id_feedback, fb.feedback_text, fb.feedback_rating, CONCAT(s.student_name, " " ,s.student_surname) as student_name_surname,  DATE_FORMAT(fb.feedback_date, '%Y-%m-%d') AS formatted_date, sj.subject_name, sj.id_subject
+      SELECT fb.id_feedback, fb.feedback_text, fb.feedback_rating, CONCAT(s.student_name, " " ,s.student_surname) as student_name_surname,  DATE_FORMAT(fb.feedback_date, '%Y-%m') AS formatted_date, sj.subject_name, sj.id_subject
       FROM subjects sj
       INNER JOIN feedbacks fb on fb.id_subject = sj.id_subject
       INNER JOIN users u ON u.id_user = fb.id_user

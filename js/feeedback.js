@@ -51,13 +51,24 @@ form.addEventListener("submit", (event) => {
     // Se non ci sono errori, procedi con l'invio del modulo
     const feedback = { subject, rating: selectedStar, message };
     feedbackData.push(feedback);
-    console.log(feedbackData);
+
+    fetch("/feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(feedback),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("success: ", data);
+      })
+      .catch((error) => {
+        console.log("error: ", error);
+      });
 
     // Esegui altre azioni, ad esempio l'invio al server o il reset del modulo
-    console.log("Invio al db");
-    form.reset();
-    selectedStar = 0;
-    changeStarColor(0);
+    resetForm();
 
     // Visualizza il popup di conferma
     popup.style.display = "block";
