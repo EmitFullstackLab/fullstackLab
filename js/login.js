@@ -29,3 +29,13 @@ form.addEventListener("submit", (e) => {
 
   window.location.replace("/pages/register.html");
 });
+
+function goToPage(pageUrl) {
+  window.location.href = pageUrl;
+}
+
+const toRegister = document.querySelector("#toRegister");
+toRegister.addEventListener("click", () => {
+  console.log("vai a register");
+  goToPage("/register");
+});

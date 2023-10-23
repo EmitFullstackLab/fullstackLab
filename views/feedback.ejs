@@ -7,19 +7,15 @@
     <link rel="stylesheet" href="/feedback.css" />
   </head>
   <body>
-    <form action="submit">
-      <span class="form-title"><%= locals.email %> FEEDBACK</span>
+    <form action="feedback" method="POST">
+      <h2><%=message %></h2>
+      <span class="form-title"> FEEDBACK</span>
 
       <div class="inputs-container">
         <select class="small-input-container" name="subject" id="subject">
-          <option value="javascript">JavaScript</option>
-          <option value="php">PHP</option>
-          <option value="java">Java</option>
-          <option value="golang">Golang</option>
-          <option value="python">Python</option>
-          <option value="c#">C#</option>
-          <option value="C++">C++</option>
-          <option value="erlang">Erlang</option>
+          <% subjects.forEach(item => { %>
+          <option value="<%=item.subject_name%>"><%=item.subject_name%></option>
+          <% }) %>
         </select>
 
         <div class="star">
@@ -90,8 +86,7 @@
           name="text"
           placeholder="Scrivi un commento..."
           required
-        >
-        </textarea>
+        ></textarea>
       </div>
 
       <div class="submit-container">
@@ -127,7 +122,7 @@
             id="exit"
             name="register-btn"
             placeholder="REGISTER"
-            value="Esci"
+            value="Log-out"
           />
         </div>
       </div>
@@ -135,6 +130,6 @@
 
     <div id="overlay" class="hidden"></div>
 
-    <script src="../js/feeedback.js"></script>
+    <script src="/feeedback.js"></script>
   </body>
 </html>

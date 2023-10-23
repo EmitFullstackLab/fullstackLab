@@ -121,21 +121,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /*
 
-  controllo sul click su LOGIN HERE!
-
-  ↓
-  ↓
-  ↓
-
-*/
-
-const toLogin = document.querySelector("#toLogin");
-toLogin.addEventListener("click", () => {
-  goToPage("/login.html");
-});
-
-/*
-
   funzione per andare in una pagina
 
   ↓
@@ -147,6 +132,22 @@ toLogin.addEventListener("click", () => {
 function goToPage(pageUrl) {
   window.location.href = pageUrl;
 }
+
+/*
+
+  controllo sul click su LOGIN HERE!
+
+  ↓
+  ↓
+  ↓
+
+*/
+
+const toLogin = document.querySelector("#toLogin");
+toLogin.addEventListener("click", () => {
+  console.log("vai a login");
+  goToPage("/login");
+});
 
 /*
 

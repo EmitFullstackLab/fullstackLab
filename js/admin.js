@@ -192,6 +192,10 @@ addAdmin.addEventListener("click", () => {
   addAdminContainer.classList.add("active");
 });
 
+adminLogout.addEventListener("click", () => {
+  window.location.href = "/logout";
+});
+
 /*
 
   aggiungere funzione di logout dell'admin
