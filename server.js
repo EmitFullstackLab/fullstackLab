@@ -66,8 +66,6 @@ app.post("/verification", async (req, res) => {
       return res.redirect("/login");
     }
   }
-
-  console.log("inserisco user");
 });
 
 /*-------------------------------------------------------------------------------------------------------------------------------*/
@@ -428,7 +426,6 @@ app.post("/addAdmin", async (req, res) => {
     const username = req.body.admin_username;
     const password = req.body.password;
     const confirmPwd = req.body.confirmPwd;
-    console.log("submitted");
 
     //query to get admin with username
     const adminUserQuery = `
@@ -455,7 +452,6 @@ app.post("/addAdmin", async (req, res) => {
 
     //hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("hashed password: ", hashedPassword);
     //create the admin
     const createAdminUser = `
         INSERT INTO admins(admin_username, admin_password)
@@ -464,7 +460,6 @@ app.post("/addAdmin", async (req, res) => {
     const [createdRow] = await promiseConnection.execute(createAdminUser);
 
     if (createdRow.affectedRows > 0) {
-      console.log("admin user created");
       return res.redirect("/admin");
     }
   } catch (error) {
@@ -490,7 +485,6 @@ app.post("/adminLogin", async (req, res) => {
     `;
 
       const [adminUserRow] = await promiseConnection.execute(adminUserQuery); // Await the query
-      console.log([adminUserRow]);
       if (adminUserRow.length > 0) {
         const adminUser = adminUserRow[0];
 
@@ -499,12 +493,9 @@ app.post("/adminLogin", async (req, res) => {
           password,
           adminUser.admin_password
         );
-        console.log("same password? ", isCorrect);
 
         if (isCorrect) {
-          console.log("admin user found: ", adminUser);
           req.session.admin = adminUser;
-          console.log(req.session.admin);
           res.redirect("/admin"); // Redirect to feedback on successful login
         } else {
           console.log(`Wrong password for admin user ${username}`);
