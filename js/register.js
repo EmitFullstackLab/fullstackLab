@@ -1,91 +1,87 @@
 const formSubmit = document.querySelector(".register-form");
 const body = document.querySelector("body");
 
-formSubmit.addEventListener("submit", function (event) {
-  event.preventDefault();
+// formSubmit.addEventListener("submit", function (event) {
+//   event.preventDefault();
 
-  /* 
-  
+//   /*
 
-    aggiungere controllo nel database se esiste gia la email inserita
-    aggiungere controllo se nome e cognome corrispondono alla matricola inserita
-  
-  
-  */
+//     aggiungere controllo nel database se esiste gia la email inserita
+//     aggiungere controllo se nome e cognome corrispondono alla matricola inserita
 
-  // Recupera i valori dei campi "password" e "confirmPwd"
-  const password = document.getElementById("password").value;
-  const confirmPwd = document.getElementById("confirmPwd").value;
+//   */
 
-  // Verifica se i campi sono uguali
-  if (password === confirmPwd) {
-    const verificationFormHtml = `    
-      <div class="confirm-form-container">
-        <form action="submit" class="confirm-form">
-            <span class="form-title">VERIFICATION CODE</span>
-            <p class="form-description">
-            Please enter the verification code sent to your email address.
-            </p>
-            <div class="inputs-container variant">
-            <div class="small-input-container">
-                <input
-                type="text"
-                id="verification-code"
-                name="verification-code"
-                placeholder="INSERT CODE"
-                maxlength="5"
-                required
-                />
-            </div>
-            <div class="group">
-                <span class="clickable-span">resend code</span>
-                <img src="mdi_email-resend-outline.svg" alt="" class="icon" />
-            </div>
-            </div>
-            <div class="submit-container variant">
-            <input
-                type="submit"
-                id="verification-code-btn"
-                name="verification-code-btn"
-                value="CONFIRM"
-            />
-            </div>
-        </form>
-      </div>
-    `;
-    body.innerHTML += verificationFormHtml;
-    const formConfirm = document.querySelector(".confirm-form");
-    // genero una stringa alfanumarica random, in questo caso di lunghezza di 5 caratteri
-    let verificationCode = generateRandomString(5);
-    console.log(verificationCode);
-    // premendo su resend code viene rigenerato il codice
-    const resendCode = formConfirm.querySelector(".group");
-    resendCode.addEventListener("click", () => {
-      verificationCode = generateRandomString(5);
-      console.log(verificationCode);
-    });
-    formConfirm.addEventListener("submit", function (event) {
-      event.preventDefault();
-      // prendo dal form il codice inserito dall'utente
-      const userVerificationCode =
-        document.getElementById("verification-code").value;
-      // controllo che l'utente abbia inserito il codice giusto
-      if (verificationCode != userVerificationCode) {
-        error("The entered verification code is not correct.");
-      } else {
-        /* 
-          
-        
-          aggiungere inserimento nel database del nuovo user e reindirizzamento alla pagina di login
-        
-        
-        */
-      }
-    });
-  } else {
-    error("Passwords do not match.");
-  }
-});
+//   // Recupera i valori dei campi "password" e "confirmPwd"
+//   const password = document.getElementById("password").value;
+//   const confirmPwd = document.getElementById("confirmPwd").value;
+
+//   // Verifica se i campi sono uguali
+//   if (password === confirmPwd) {
+//     const verificationFormHtml = `
+//       <div class="confirm-form-container">
+//         <form action="submit" class="confirm-form">
+//             <span class="form-title">VERIFICATION CODE</span>
+//             <p class="form-description">
+//             Please enter the verification code sent to your email address.
+//             </p>
+//             <div class="inputs-container variant">
+//             <div class="small-input-container">
+//                 <input
+//                 type="text"
+//                 id="verification-code"
+//                 name="verification-code"
+//                 placeholder="INSERT CODE"
+//                 maxlength="5"
+//                 required
+//                 />
+//             </div>
+//             <div class="group">
+//                 <span class="clickable-span">resend code</span>
+//                 <img src="mdi_email-resend-outline.svg" alt="" class="icon" />
+//             </div>
+//             </div>
+//             <div class="submit-container variant">
+//             <input
+//                 type="submit"
+//                 id="verification-code-btn"
+//                 name="verification-code-btn"
+//                 value="CONFIRM"
+//             />
+//             </div>
+//         </form>
+//       </div>
+//     `;
+//     body.innerHTML += verificationFormHtml;
+//     const formConfirm = document.querySelector(".confirm-form");
+//     // genero una stringa alfanumarica random, in questo caso di lunghezza di 5 caratteri
+//     let verificationCode = generateRandomString(5);
+//     console.log(verificationCode);
+//     // premendo su resend code viene rigenerato il codice
+//     const resendCode = formConfirm.querySelector(".group");
+//     resendCode.addEventListener("click", () => {
+//       verificationCode = generateRandomString(5);
+//       console.log(verificationCode);
+//     });
+//     formConfirm.addEventListener("submit", function (event) {
+//       event.preventDefault();
+//       // prendo dal form il codice inserito dall'utente
+//       const userVerificationCode =
+//         document.getElementById("verification-code").value;
+//       // controllo che l'utente abbia inserito il codice giusto
+//       if (verificationCode != userVerificationCode) {
+//         error("The entered verification code is not correct.");
+//       } else {
+//         /*
+
+//           aggiungere inserimento nel database del nuovo user e reindirizzamento alla pagina di login
+
+//         */
+//       }
+//     });
+//   } else {
+//     error("Passwords do not match.");
+//   }
+// });
 
 /*
 
@@ -181,12 +177,12 @@ function error(text) {
 
 */
 
-function generateRandomString(length) {
-  const charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let result = "";
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
-    result += charset[randomIndex];
-  }
-  return result;
-}
+// function generateRandomString(length) {
+//   const charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+//   let result = "";
+//   for (let i = 0; i < length; i++) {
+//     const randomIndex = Math.floor(Math.random() * charset.length);
+//     result += charset[randomIndex];
+//   }
+//   return result;
+// }

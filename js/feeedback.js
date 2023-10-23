@@ -49,7 +49,6 @@ form.addEventListener("submit", (event) => {
     // Se non ci sono errori, procedi con l'invio del modulo
     const feedback = { subject, rating: selectedStar, message };
     feedbackData.push(feedback);
-    console.log("feedbackData: ", feedbackData);
 
     fetch("/feedback", {
       method: "POST",
@@ -67,7 +66,6 @@ form.addEventListener("submit", (event) => {
       });
 
     // Esegui altre azioni, ad esempio l'invio al server o il reset del modulo
-    console.log("Invio al db");
     resetForm();
 
     // Visualizza il popup di conferma
@@ -82,7 +80,6 @@ const continua = document.getElementById("continua");
 
 // Aggiungi un evento per chiudere il popup e nascondere lo sfondo opaco
 continua.addEventListener("click", function () {
-  console.log("continua");
   popup.style.display = "none";
   overlay.style.display = "none";
   resetForm();
@@ -92,7 +89,6 @@ continua.addEventListener("click", function () {
 const exitButton = document.querySelector("#exit"); // Seleziona l'elemento per il pulsante "Esci"
 
 exitButton.addEventListener("click", () => {
-  console.log("pop up chiuso");
   popup.style.display = "none";
   overlay.style.display = "none";
   window.location.href = "/logout";
