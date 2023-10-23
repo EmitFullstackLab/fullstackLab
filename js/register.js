@@ -141,7 +141,6 @@ function goToPage(pageUrl) {
 
 const toLogin = document.querySelector("#toLogin");
 toLogin.addEventListener("click", () => {
-  console.log("vai a login");
   goToPage("/login");
 });
 

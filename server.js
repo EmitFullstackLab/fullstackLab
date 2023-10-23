@@ -368,22 +368,22 @@ app.get("/admin_login", (req, res) => {
   ↓
 
 */
-
 app.get("/admin", async (req, res) => {
-  try {
-    const message = req.query.message;
+  if (req.session.admin) {
+    try {
+      const message = req.query.message;
 
-    // query di tutte le materie
-    const subjectsQuery = `
+      // query di tutte le materie
+      const subjectsQuery = `
       SELECT sj.id_subject, sj.subject_name 
       FROM subjects sj
       ORDER BY sj.subject_name;
     `;
 
-    const [subjectsRow] = await promiseConnection.execute(subjectsQuery); // Await the query
+      const [subjectsRow] = await promiseConnection.execute(subjectsQuery); // Await the query
 
-    // query di tutti i feedback
-    const feedbacksQuery = `
+      // query di tutti i feedback
+      const feedbacksQuery = `
       SELECT fb.id_feedback, fb.feedback_text, fb.feedback_rating, CONCAT(s.student_name, " " ,s.student_surname) as student_name_surname,  DATE_FORMAT(fb.feedback_date, '%Y-%m-%d') AS formatted_date, sj.subject_name, sj.id_subject
       FROM subjects sj
       INNER JOIN feedbacks fb on fb.id_subject = sj.id_subject
@@ -392,10 +392,10 @@ app.get("/admin", async (req, res) => {
       ORDER BY formatted_date DESC;
     `;
 
-    const [feedbacksRow] = await promiseConnection.execute(feedbacksQuery); // Await the query
+      const [feedbacksRow] = await promiseConnection.execute(feedbacksQuery); // Await the query
 
-    // query di tutte le materie
-    const subjectsAveragesQuery = `
+      // query di tutte le materie
+      const subjectsAveragesQuery = `
       SELECT AVG(fb.feedback_rating) as subjects_averages, DATE_FORMAT(fb.feedback_date, '%Y-%m') AS formatted_date, sj.id_subject
       FROM subjects sj
       INNER JOIN feedbacks fb ON fb.id_subject = sj.id_subject
@@ -403,18 +403,23 @@ app.get("/admin", async (req, res) => {
       ORDER BY formatted_date;
     `;
 
-    const [subjectsAveragesRow] = await promiseConnection.execute(
-      subjectsAveragesQuery
-    ); // Await the query
+      const [subjectsAveragesRow] = await promiseConnection.execute(
+        subjectsAveragesQuery
+      ); // Await the query
 
-    res.render("admin.ejs", {
-      message: message,
-      feedbacks: [feedbacksRow],
-      subjects: [subjectsRow],
-      subjectsAverages: [subjectsAveragesRow],
-    });
-  } catch (error) {
-    console.log("Error executing query:", error);
+      res.render("admin.ejs", {
+        message: message,
+        feedbacks: [feedbacksRow],
+        subjects: [subjectsRow],
+        subjectsAverages: [subjectsAveragesRow],
+      });
+    } catch (error) {
+      console.log("Error executing query:", error);
+    }
+  } else if (req.session.user) {
+    res.redirect("/");
+  } else {
+    res.redirect("/admin_login");
   }
 });
 
@@ -423,6 +428,7 @@ app.post("/addAdmin", async (req, res) => {
     const username = req.body.admin_username;
     const password = req.body.password;
     const confirmPwd = req.body.confirmPwd;
+    console.log("submitted");
 
     //query to get admin with username
     const adminUserQuery = `
@@ -449,6 +455,7 @@ app.post("/addAdmin", async (req, res) => {
 
     //hash password
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("hashed password: ", hashedPassword);
     //create the admin
     const createAdminUser = `
         INSERT INTO admins(admin_username, admin_password)
@@ -457,6 +464,7 @@ app.post("/addAdmin", async (req, res) => {
     const [createdRow] = await promiseConnection.execute(createAdminUser);
 
     if (createdRow.affectedRows > 0) {
+      console.log("admin user created");
       return res.redirect("/admin");
     }
   } catch (error) {
@@ -465,34 +473,48 @@ app.post("/addAdmin", async (req, res) => {
 });
 
 app.post("/adminLogin", async (req, res) => {
-  try {
-    const username = req.body.username;
-    const password = req.body.password;
+  if (req.session.admin) {
+    res.redirect("/admin");
+  } else if (req.session.user) {
+    res.redirect("/");
+  } else {
+    try {
+      const username = req.body.username;
+      const password = req.body.password;
 
-    //query to get admin with username
-    const adminUserQuery = `
-    SELECT a.idadmin, a.admin_username, a.admin_password 
-    FROM admins a
-    WHERE a.admin_username = "${username}";
-  `;
+      //query to get admin with username
+      const adminUserQuery = `
+      SELECT a.idadmin, a.admin_username, a.admin_password 
+      FROM admins a
+      WHERE a.admin_username = "${username}";
+    `;
 
-    const [adminUserRow] = await promiseConnection.execute(adminUserQuery); // Await the query
-    if (adminUserRow.length > 0) {
-      const adminUser = adminUserRow[0];
+      const [adminUserRow] = await promiseConnection.execute(adminUserQuery); // Await the query
+      console.log([adminUserRow]);
+      if (adminUserRow.length > 0) {
+        const adminUser = adminUserRow[0];
 
-      //match hashed password in db with form password
-      const isCorrect = bcrypt.compare(password, adminUser.admin_password);
+        //match hashed password in db with form password
+        const isCorrect = await bcrypt.compare(
+          password,
+          adminUser.admin_password
+        );
+        console.log("same password? ", isCorrect);
 
-      if (adminUser.admin_password === password) {
-        res.redirect("/admin"); // Redirect to feedback on successful login
+        if (isCorrect) {
+          console.log("admin user found: ", adminUser);
+          req.session.admin = adminUser;
+          console.log(req.session.admin);
+          res.redirect("/admin"); // Redirect to feedback on successful login
+        } else {
+          console.log(`Wrong password for admin user ${username}`);
+        }
       } else {
-        console.log(`Wrong password for admin user ${username}`);
+        console.log(`Admin user with username ${username} not found`);
       }
-    } else {
-      console.log(`Admin user with username ${username} not found`);
+    } catch (error) {
+      console.log("Error executing query:", error);
     }
-  } catch (error) {
-    console.log("Error executing query:", error);
   }
 });
 

@@ -138,11 +138,6 @@ body {
   visibility: hidden;
 }
 
-#dati-nascosti-feedbacks {
-  display: none;
-  visibility: hidden;
-}
-
 .feedback-autor {
   width: 100%;
   display: flex;
