@@ -413,7 +413,7 @@ app.get("/admin", async (req, res) => {
 
       // query di tutte le materie
       const subjectsAveragesQuery = `
-      SELECT AVG(fb.feedback_rating) as subjects_averages, DATE_FORMAT(fb.feedback_date, '%Y-%m') AS formatted_date, sj.id_subject
+      SELECT AVG(fb.feedback_rating) as subjects_averages, DATE_FORMAT(fb.feedback_date, '%Y-%m-%d') AS formatted_date, sj.id_subject
       FROM subjects sj
       INNER JOIN feedbacks fb ON fb.id_subject = sj.id_subject
       GROUP BY sj.subject_name, formatted_date

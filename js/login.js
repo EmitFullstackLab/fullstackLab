@@ -9,6 +9,10 @@ async function fetchAsync(url) {
   return data;
 }
 
+function goToPage(pageUrl) {
+  window.location.href = pageUrl;
+}
+
 const toRegister = document.querySelector("#toRegister");
 toRegister.addEventListener("click", () => {
   console.log("vai a register");
