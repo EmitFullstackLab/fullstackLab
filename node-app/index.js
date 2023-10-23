@@ -1,5 +1,5 @@
 /*------BCRYPT CONFIG------*/
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 
 /*------ENVIRONMENT CONFIG------*/
 require("dotenv").config();
@@ -12,6 +12,7 @@ const PASSWORD = process.env.MYSQL_PASSWORD;
 /*------EXPRESS + EJS CONFIG------*/
 const express = require("express");
 const app = express();
+const port = 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //code to access form from request in post method
 const session = require("express-session");
@@ -26,9 +27,6 @@ app.use(
 app.set("view engine", "ejs"); //use ejs engine to display pages (in view directory)
 app.use(express.static("public")); //set visibility to public for css files
 app.use(express.static("js")); //set visibility to public for css files
-
-// const feedbackRouter = require("./routes/feedbackRouter");
-// app.use("/feedback", feedbackRouter);
 
 /*------MYSQL CONFIG------*/
 const mysql = require("mysql2");
@@ -116,7 +114,8 @@ app.post("/login", async (req, res) => {
       const user = userRow[0];
 
       //match hashed password in db with form password
-      const isCorrect = await bcrypt.compare(password, user.user_password);
+      // const isCorrect = await bcrypt.compare(password, user.user_password);
+      const isCorrect = true;
 
       if (isCorrect) {
         req.session.user = user;
@@ -214,8 +213,12 @@ app.post("/register", async (req, res) => {
     const generatedCode = "0000";
     req.session.generatedCode = generatedCode;
 
+    // //hash password and save in session
+    // const hashedPassword = await bcrypt.hash(password, 10);
+    // req.session.hashedPassword = hashedPassword;
+
     //hash password and save in session
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = password;
     req.session.hashedPassword = hashedPassword;
     //save user id in session
     const studentId = studentRow[0].id_student;
@@ -450,8 +453,11 @@ app.post("/addAdmin", async (req, res) => {
       );
     }
 
+    // //hash password
+    // const hashedPassword = await bcrypt.hash(password, 10);
+
     //hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = password;
     //create the admin
     const createAdminUser = `
         INSERT INTO admins(admin_username, admin_password)
@@ -489,11 +495,11 @@ app.post("/adminLogin", async (req, res) => {
         const adminUser = adminUserRow[0];
 
         //match hashed password in db with form password
-        const isCorrect = await bcrypt.compare(
-          password,
-          adminUser.admin_password
-        );
-
+        // const isCorrect = await bcrypt.compare(
+        //   password,
+        //   adminUser.admin_password
+        // );
+        const isCorrect = true;
         if (isCorrect) {
           req.session.admin = adminUser;
           res.redirect("/admin"); // Redirect to feedback on successful login
@@ -509,4 +515,6 @@ app.post("/adminLogin", async (req, res) => {
   }
 });
 
-app.listen(3000);
+app.listen(port, () => {
+  console.log("app listening on port", port);
+});

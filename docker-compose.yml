@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  fullstackapp:
+    build:
+      context: ./node-app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - fullstacknetwork
+  nginx:
+    restart: always
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    networks:
+      - fullstacknetwork
+  db:
+    build:
+      context: ./db
+    ports:
+      - "3308:3306"
+    env_file:
+      - ./dbenv.env
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - fullstacknetwork
+networks:
+  fullstacknetwork:
+    driver: bridge
+volumes:
+  mysql-data:
+    driver: local
