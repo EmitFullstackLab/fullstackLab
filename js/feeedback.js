@@ -4,14 +4,12 @@ let feedbackData = [];
 function changeStarColor(selectedValue) {
   selectedStar = selectedValue;
   const stars = document.querySelectorAll(".star svg");
-  const stars = document.querySelectorAll(".star svg");
   stars.forEach((star, index) => {
     star.classList.toggle("selected", index < selectedValue);
     star.classList.toggle("selected", index < selectedValue);
   });
 }
 
-const stars = document.querySelectorAll(".star svg");
 const stars = document.querySelectorAll(".star svg");
 stars.forEach((star, index) => {
   star.addEventListener("click", () => changeStarColor(index + 1));
@@ -24,8 +22,6 @@ function resetForm() {
   changeStarColor(0);
 }
 
-const form = document.querySelector("form");
-form.addEventListener("submit", (event) => {
 const form = document.querySelector("form");
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -72,9 +68,6 @@ form.addEventListener("submit", (event) => {
 const popup = document.getElementById("popup");
 const overlay = document.getElementById("overlay");
 const continua = document.getElementById("continua");
-const popup = document.getElementById("popup");
-const overlay = document.getElementById("overlay");
-const continua = document.getElementById("continua");
 
 // Aggiungi un evento per chiudere il popup e nascondere lo sfondo opaco
 continua.addEventListener("click", function () {
@@ -84,11 +77,10 @@ continua.addEventListener("click", function () {
 });
 
 const exitButton = document.querySelector("#exit"); // Seleziona l'elemento per il pulsante "Esci"
-const exitButton = document.querySelector("#exit"); // Seleziona l'elemento per il pulsante "Esci"
 
 exitButton.addEventListener("click", () => {
   console.log("pop up chiuso");
   popup.style.display = "none";
   overlay.style.display = "none";
+  window.location.href = "/logout";
 });
-

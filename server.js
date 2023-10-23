@@ -23,17 +23,6 @@ app.use(
   })
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true })); //code to access form from request in post method
-const session = require("express-session");
-app.use(
-  session({
-    secret: "secret_key", //used to sign the session ID cookie
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
 app.set("view engine", "ejs"); //use ejs engine to display pages (in view directory)
 app.use(express.static("public")); //set visibility to public for css files
 app.use(express.static("js")); //set visibility to public for css files
@@ -93,15 +82,6 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  const { message, errormsg } = req.query;
-  console.log(message);
-  res.render("login.ejs", {
-    message: message,
-    isActive: errormsg,
-  });
-});
-
-app.get("/login", (req, res) => {
   if (req.session.admin) {
     res.redirect("/");
   } else if (req.session.user) {
@@ -121,18 +101,6 @@ app.get("/admin_login", (req, res) => {
   } else {
     const message = req.query.message;
     res.render("admin_login.ejs", { message: message });
-  }
-});
-
-app.get("/feedback", (req, res) => {
-  if (req.session.admin) {
-    res.redirect("/admin_login");
-  } else if (req.session.user) {
-    const message = req.query.message;
-    res.render("feedback.ejs", { message: message });
-  } else {
-    res.redirect("/");
-    console.log("ma chi stracazzo sei?");
   }
 });
 
@@ -393,12 +361,6 @@ app.post("/feedback", async (req, res) => {
     console.log("feedback: ", feedback);
   }
 });
-
-app.get("/admin_login", (req, res) => {
-  const message = req.query.message;
-  res.render("admin_login.ejs", { message: message });
-});
-
 /*
 
     ___
@@ -425,7 +387,6 @@ app.get("/admin_login", (req, res) => {
 
 app.get("/admin", async (req, res) => {
   if (req.session.admin) {
-    res.redirect("/admin");
     try {
       const message = req.query.message;
 
