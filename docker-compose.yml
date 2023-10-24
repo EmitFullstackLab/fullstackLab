@@ -1,36 +1,44 @@
-version: "3.8"
+# version: "3.8"
 services:
   fullstackapp:
+    # restart: always
     build:
       context: ./node-app
     ports:
       - "5000:5000"
     depends_on:
-      - db
-    networks:
-      - fullstacknetwork
+      db:
+        condition: service_healthy
+    # networks:
+    #   - fullstacknetwork
   nginx:
     restart: always
     build:
       context: ./nginx
     ports:
       - "80:80"
-    networks:
-      - fullstacknetwork
+    # networks:
+    #   - fullstacknetwork
   db:
     build:
       context: ./db
     ports:
-      - "3308:3306"
+      - "3306:3306"
     env_file:
       - ./dbenv.env
     volumes:
       - mysql-data:/var/lib/mysql
-    networks:
-      - fullstacknetwork
-networks:
-  fullstacknetwork:
-    driver: bridge
+    # networks:
+    #   - fullstacknetwork
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      # interval: 1m30s
+      timeout: 2s
+      retries: 15
+      # start_period: 30s
+# networks:
+#   fullstacknetwork:
+#     driver: bridge
 volumes:
   mysql-data:
     driver: local
