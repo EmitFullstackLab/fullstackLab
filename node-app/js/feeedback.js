@@ -93,3 +93,9 @@ exitButton.addEventListener("click", () => {
   overlay.style.display = "none";
   window.location.href = "/logout";
 });
+
+const logoutDiv = document.querySelector(".logout-container"); // Seleziona l'elemento per il pulsante "Esci"
+
+logoutDiv.addEventListener("click", () => {
+  window.location.href = "/logout";
+});
