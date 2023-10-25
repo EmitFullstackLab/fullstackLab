@@ -17,8 +17,8 @@ services:
       context: ./nginx
     ports:
       - "80:80"
-    networks:
-      - fullstacknetwork
+    # networks:
+    #   - fullstacknetwork
   db:
     build:
       context: ./db
@@ -28,11 +28,15 @@ services:
       - ./dbenv.env
     volumes:
       - mysql-data:/var/lib/mysql
-    networks:
-      - fullstacknetwork
-networks:
-  fullstacknetwork:
-    driver: bridge
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 2s
+      retries: 15
+#     networks:
+#       - fullstacknetwork
+# networks:
+#   fullstacknetwork:
+#     driver: bridge
 volumes:
   mysql-data:
     driver: local

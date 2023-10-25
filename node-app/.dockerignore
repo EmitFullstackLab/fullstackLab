@@ -1,0 +1,2 @@
+#ignoring node_modules to avoid conflict for bcrypt
+node_modules

@@ -1,0 +1,2 @@
+# env variables for db in docker-compose
+dbenv.env

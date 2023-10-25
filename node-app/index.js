@@ -1,5 +1,5 @@
 /*------BCRYPT CONFIG------*/
-// const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 
 /*------ENVIRONMENT CONFIG------*/
 require("dotenv").config();
@@ -115,8 +115,8 @@ app.post("/login", async (req, res) => {
       const user = userRow[0];
 
       //match hashed password in db with form password
-      // const isCorrect = await bcrypt.compare(password, user.user_password);
-      const isCorrect = true;
+      const isCorrect = await bcrypt.compare(password, user.user_password);
+      // const isCorrect = true;
 
       if (isCorrect) {
         req.session.user = user;
@@ -215,12 +215,12 @@ app.post("/register", async (req, res) => {
     req.session.generatedCode = generatedCode;
 
     // //hash password and save in session
-    // const hashedPassword = await bcrypt.hash(password, 10);
-    // req.session.hashedPassword = hashedPassword;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    req.session.hashedPassword = hashedPassword;
 
     //hash password and save in session
-    const hashedPassword = password;
-    req.session.hashedPassword = hashedPassword;
+    // const hashedPassword = password;
+    // req.session.hashedPassword = hashedPassword;
     //save user id in session
     const studentId = studentRow[0].id_student;
     req.session.studentId = studentId;
@@ -455,10 +455,10 @@ app.post("/addAdmin", async (req, res) => {
     }
 
     // //hash password
-    // const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     //hash password
-    const hashedPassword = password;
+    // const hashedPassword = password;
     //create the admin
     const createAdminUser = `
         INSERT INTO admins(admin_username, admin_password)
@@ -496,11 +496,11 @@ app.post("/adminLogin", async (req, res) => {
         const adminUser = adminUserRow[0];
 
         //match hashed password in db with form password
-        // const isCorrect = await bcrypt.compare(
-        //   password,
-        //   adminUser.admin_password
-        // );
-        const isCorrect = true;
+        const isCorrect = await bcrypt.compare(
+          password,
+          adminUser.admin_password
+        );
+        // const isCorrect = true;
         if (isCorrect) {
           req.session.admin = adminUser;
           res.redirect("/admin"); // Redirect to feedback on successful login
