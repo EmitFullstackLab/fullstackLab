@@ -33,6 +33,29 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffd700",endColorstr="#f6df9e",GradientType=1);
 }
 
+.logout-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: fit-content;
+  height: 32px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+}
+
+span.logout-text {
+  font-size: 1.3rem;
+  font-weight: 600;
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 form {
   width: 500px;
   height: auto;

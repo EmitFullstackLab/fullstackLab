@@ -27,6 +27,7 @@ app.use(
 app.set("view engine", "ejs"); //use ejs engine to display pages (in view directory)
 app.use(express.static("public")); //set visibility to public for css files
 app.use(express.static("js")); //set visibility to public for css files
+app.use(express.static("imgs")); //set visibility to public for css files
 
 /*------MYSQL CONFIG------*/
 const mysql = require("mysql2");
