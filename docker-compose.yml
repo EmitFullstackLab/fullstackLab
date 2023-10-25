@@ -1,6 +1,7 @@
-version: "3.8"
+# version: "3.8"
 services:
   fullstackapp:
+    # restart: always
     build:
       context: ./node-app
     ports:
@@ -29,10 +30,8 @@ services:
       - mysql-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      
       timeout: 2s
       retries: 15
-      
 #     networks:
 #       - fullstacknetwork
 # networks:
