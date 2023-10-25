@@ -1,7 +1,5 @@
-# version: "3.8"
 services:
   fullstackapp:
-    # restart: always
     build:
       context: ./node-app
     ports:
@@ -9,16 +7,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    # networks:
-    #   - fullstacknetwork
   nginx:
     restart: always
     build:
       context: ./nginx
     ports:
       - "80:80"
-    # networks:
-    #   - fullstacknetwork
   db:
     build:
       context: ./db
@@ -32,11 +26,6 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 2s
       retries: 15
-#     networks:
-#       - fullstacknetwork
-# networks:
-#   fullstacknetwork:
-#     driver: bridge
 volumes:
   mysql-data:
     driver: local

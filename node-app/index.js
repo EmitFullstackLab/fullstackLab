@@ -394,6 +394,7 @@ app.get("/admin", async (req, res) => {
   if (req.session.admin) {
     try {
       const message = req.query.message;
+      console.log("seleziono MFrom highest to lowest req.query: ", req.query);
 
       // query di tutte le materie
       const subjectsQuery = `
