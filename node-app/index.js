@@ -57,9 +57,13 @@ app.post("/verification", async (req, res) => {
     //create the user
     const createUser = `
       INSERT INTO users(id_user, user_email, user_password)
-      VALUES(${studentId}, '${email}', '${hashedPassword}')
+      VALUES(?,?,?)
     `;
-    const [createdRow] = await promiseConnection.execute(createUser);
+    const [createdRow] = await promiseConnection.execute(createUser, [
+      studentId,
+      email,
+      hashedPassword,
+    ]);
 
     if (createdRow.affectedRows > 0) {
       return res.redirect("/login");
@@ -104,12 +108,12 @@ app.post("/login", async (req, res) => {
 
     //query to get user with email
     const userQuery = `
-    SELECT u.id_user, u.user_email, u.user_password
-    FROM users u
-    WHERE u.user_email = "${email}";
-  `;
+      SELECT u.id_user, u.user_email, u.user_password
+      FROM users u
+      WHERE u.user_email = ?;
+    `;
 
-    const [userRow] = await promiseConnection.execute(userQuery); // Await the query
+    const [userRow] = await promiseConnection.execute(userQuery, [email]); // Await the query
 
     if (userRow.length > 0) {
       const user = userRow[0];
@@ -158,7 +162,7 @@ app.post("/register", async (req, res) => {
     const userQuery = `
     SELECT u.id_user, u.user_email, u.user_password
     FROM users u
-    WHERE u.user_email = "${email}";
+    WHERE u.user_email = ?;
   `;
 
     // query to look for a student that match user by studNum
@@ -166,18 +170,18 @@ app.post("/register", async (req, res) => {
       SELECT u.id_user, u.user_email, u.user_password
       FROM users u
       INNER JOIN students s on s.id_student = u.id_user
-      WHERE s.student_number = "${studNum}";
+      WHERE s.student_number = ?;
     `;
 
     // query to find student with name/surname match with studNum
     const studentQuery = `
       SELECT s.id_student, s.student_name, s.student_surname, s.student_number
       FROM students s
-      WHERE s.student_name = "${name}" AND s.student_surname = "${surname}" AND s.student_number = "${studNum}";
+      WHERE s.student_name = ? AND s.student_surname = ? AND s.student_number = ?;
     `;
 
     //check if user already exist
-    const [userRow] = await promiseConnection.execute(userQuery);
+    const [userRow] = await promiseConnection.execute(userQuery, [email]);
 
     if (userRow.length > 0) {
       return res.redirect(
@@ -186,7 +190,9 @@ app.post("/register", async (req, res) => {
     }
 
     //check if there's user linked with student with that student number
-    const [studNumRow] = await promiseConnection.execute(checkStudNum);
+    const [studNumRow] = await promiseConnection.execute(checkStudNum, [
+      studNum,
+    ]);
 
     if (studNumRow.length > 0) {
       return res.redirect(
@@ -194,7 +200,11 @@ app.post("/register", async (req, res) => {
       );
     }
 
-    const [studentRow] = await promiseConnection.execute(studentQuery);
+    const [studentRow] = await promiseConnection.execute(studentQuery, [
+      name,
+      surname,
+      studNum,
+    ]);
 
     if (studentRow.length === 0) {
       return res.redirect(
@@ -251,10 +261,12 @@ app.get("/feedback", async (req, res) => {
       SELECT student_name
       FROM users u
       INNER JOIN students s on u.id_user = s.id_student
-      WHERE u.id_user = '${userId}'
+      WHERE u.id_user = ?
     `;
 
-    const [studentNameRow] = await promiseConnection.execute(studentNameQuery);
+    const [studentNameRow] = await promiseConnection.execute(studentNameQuery, [
+      userId,
+    ]);
     const studentName = studentNameRow[0].student_name;
     const message = `Welcome ${studentName}`;
 
@@ -263,7 +275,7 @@ app.get("/feedback", async (req, res) => {
       SELECT s.subject_name, f.id_subject, f.id_user
       FROM feedbacks f
       INNER JOIN subjects s on f.id_subject = s.id_subject
-      WHERE f.id_user='${userId}'
+      WHERE f.id_user=?
     `;
 
     //get all subjects
@@ -274,7 +286,8 @@ app.get("/feedback", async (req, res) => {
     `;
     const [allSubjects] = await promiseConnection.execute(subjectsQuery);
     const [subjectsWithFeedback] = await promiseConnection.execute(
-      feedbackUserQuery
+      feedbackUserQuery,
+      [userId]
     );
 
     if (subjectsWithFeedback.length > 0) {
@@ -317,13 +330,14 @@ app.post("/feedback", async (req, res) => {
     const userId = req.session.user.id_user;
 
     const subjectIdFromNameQuery = `
-    SELECT  id_subject
-    FROM subjects
-    WHERE subject_name = "${feedback.subject}"
-  `;
+      SELECT  id_subject
+      FROM subjects
+      WHERE subject_name = ?
+    `;
 
     const [subjectIdRow] = await promiseConnection.execute(
-      subjectIdFromNameQuery
+      subjectIdFromNameQuery,
+      [feedback.subject]
     );
     const subjectId = subjectIdRow[0].id_subject;
     const feedbackDate = new Date()
@@ -333,10 +347,16 @@ app.post("/feedback", async (req, res) => {
 
     const addFeedbackQuery = `
     INSERT INTO feedbacks(feedback_text, feedback_rating, id_user, id_subject, feedback_date)
-    VALUES("${feedback.message}", "${feedback.rating}", ${userId}, ${subjectId}, "${feedbackDate}")  
+    VALUES(?, ?, ?, ?, ?)  
   `;
 
-    const [addFeedback] = await promiseConnection.execute(addFeedbackQuery);
+    const [addFeedback] = await promiseConnection.execute(addFeedbackQuery, [
+      feedback.message,
+      feedback.rating,
+      userId,
+      subjectId,
+      feedbackDate,
+    ]);
     if (addFeedback.affectedRows > 0) {
     }
   }
@@ -377,33 +397,33 @@ app.get("/admin", async (req, res) => {
 
       // query di tutte le materie
       const subjectsQuery = `
-      SELECT sj.id_subject, sj.subject_name 
-      FROM subjects sj
-      ORDER BY sj.subject_name;
-    `;
+        SELECT sj.id_subject, sj.subject_name 
+        FROM subjects sj
+        ORDER BY sj.subject_name;
+      `;
 
       const [subjectsRow] = await promiseConnection.execute(subjectsQuery); // Await the query
 
       // query di tutti i feedback
       const feedbacksQuery = `
-      SELECT fb.id_feedback, fb.feedback_text, fb.feedback_rating, CONCAT(s.student_name, " " ,s.student_surname) as student_name_surname,  DATE_FORMAT(fb.feedback_date, '%Y-%m-%d') AS formatted_date, sj.subject_name, sj.id_subject
-      FROM subjects sj
-      INNER JOIN feedbacks fb on fb.id_subject = sj.id_subject
-      INNER JOIN users u ON u.id_user = fb.id_user
-      INNER JOIN students s ON s.id_student = u.id_user
-      ORDER BY formatted_date DESC;
-    `;
+        SELECT fb.id_feedback, fb.feedback_text, fb.feedback_rating, CONCAT(s.student_name, " " ,s.student_surname) as student_name_surname,  DATE_FORMAT(fb.feedback_date, '%Y-%m-%d') AS formatted_date, sj.subject_name, sj.id_subject
+        FROM subjects sj
+        INNER JOIN feedbacks fb on fb.id_subject = sj.id_subject
+        INNER JOIN users u ON u.id_user = fb.id_user
+        INNER JOIN students s ON s.id_student = u.id_user
+        ORDER BY formatted_date DESC;
+      `;
 
       const [feedbacksRow] = await promiseConnection.execute(feedbacksQuery); // Await the query
 
       // query di tutte le materie
       const subjectsAveragesQuery = `
-      SELECT AVG(fb.feedback_rating) as subjects_averages, DATE_FORMAT(fb.feedback_date, '%Y-%m') AS formatted_date, sj.id_subject
-      FROM subjects sj
-      INNER JOIN feedbacks fb ON fb.id_subject = sj.id_subject
-      GROUP BY sj.subject_name, formatted_date
-      ORDER BY formatted_date;
-    `;
+        SELECT AVG(fb.feedback_rating) as subjects_averages, DATE_FORMAT(fb.feedback_date, '%Y-%m') AS formatted_date, sj.id_subject
+        FROM subjects sj
+        INNER JOIN feedbacks fb ON fb.id_subject = sj.id_subject
+        GROUP BY sj.subject_name, formatted_date
+        ORDER BY formatted_date;
+      `;
 
       const [subjectsAveragesRow] = await promiseConnection.execute(
         subjectsAveragesQuery
@@ -435,11 +455,13 @@ app.post("/addAdmin", async (req, res) => {
     const adminUserQuery = `
     SELECT a.idadmin, a.admin_username, a.admin_password 
     FROM admins a
-    WHERE a.admin_username = "${username}";
+    WHERE a.admin_username = ?;
   `;
 
     //check if admin already exist
-    const [adminUserRow] = await promiseConnection.execute(adminUserQuery);
+    const [adminUserRow] = await promiseConnection.execute(adminUserQuery, [
+      username,
+    ]);
 
     if (adminUserRow.length > 0) {
       return res.redirect(
@@ -462,9 +484,12 @@ app.post("/addAdmin", async (req, res) => {
     //create the admin
     const createAdminUser = `
         INSERT INTO admins(admin_username, admin_password)
-        VALUES('${username}', '${hashedPassword}')
+        VALUES(?, ?)
       `;
-    const [createdRow] = await promiseConnection.execute(createAdminUser);
+    const [createdRow] = await promiseConnection.execute(createAdminUser, [
+      username,
+      hashedPassword,
+    ]);
 
     if (createdRow.affectedRows > 0) {
       return res.redirect("/admin");
@@ -488,10 +513,12 @@ app.post("/adminLogin", async (req, res) => {
       const adminUserQuery = `
       SELECT a.idadmin, a.admin_username, a.admin_password 
       FROM admins a
-      WHERE a.admin_username = "${username}";
+      WHERE a.admin_username = ?;
     `;
 
-      const [adminUserRow] = await promiseConnection.execute(adminUserQuery); // Await the query
+      const [adminUserRow] = await promiseConnection.execute(adminUserQuery, [
+        username,
+      ]); // Await the query
       if (adminUserRow.length > 0) {
         const adminUser = adminUserRow[0];
 
